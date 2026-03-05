@@ -42,8 +42,8 @@ export default function Footer() {
                     {/* Brand */}
                     <div>
                         <div className="flex items-center gap-2.5 mb-4">
-                            <div className="w-9 h-9 bg-white/15 rounded-[8px] flex items-center justify-center">
-                                <Package size={18} color="white" />
+                            <div className="w-9 h-9  rounded-[8px] flex items-center justify-center">
+                                <Package size={32} color="white" />
                             </div>
                             <span className="font-sora font-bold text-[15px] text-white">
                                 Buan Enterprise

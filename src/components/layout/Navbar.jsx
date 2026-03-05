@@ -17,8 +17,8 @@ import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Create", href: "/create" },
-  { label: "Status", href: "/status" },
+  { label: "Shipment Create", href: "/create" },
+  { label: "Order Status", href: "/status" },
 ];
 
 export default function Navbar() {
@@ -54,7 +54,7 @@ export default function Navbar() {
           ${
             isTransparent
               ? "bg-transparent border-transparent"
-              : "bg-[#0A0E1A]/95 backdrop-blur-xl border-white/8 shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
+              : "bg-primary/95 backdrop-blur-xl border-white/8 shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
           }
         `}
       >

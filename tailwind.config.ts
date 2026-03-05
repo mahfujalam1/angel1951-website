@@ -26,8 +26,8 @@ const config: Config = {
                 "light-gray": "#F3F6FF",
             },
             fontFamily: {
-                sora: ["var(--font-sora)", "sans-serif"],
-                inter: ["var(--font-inter)", "sans-serif"],
+                sans: ["var(--font-inter)", "sans-serif"],
+                poppins: ["var(--font-poppins)", "sans-serif"],
             },
             borderRadius: {
                 lg: "var(--radius)",
