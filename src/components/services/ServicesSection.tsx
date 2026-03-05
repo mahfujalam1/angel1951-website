@@ -19,7 +19,7 @@ export default function ServicesSection({
 }: ServicesSectionProps) {
     return (
         <section style={{ background: bgColor }} className="py-20 mt-10">
-            <div className="max-w-[1200px] mx-auto px-10">
+            <div className="max-w-7xl mx-auto px-10">
                 <SectionHeader
                     tag={tag}
                     tagIcon="🚚"

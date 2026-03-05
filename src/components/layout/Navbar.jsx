@@ -6,13 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Bell, User, Package } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
@@ -29,8 +22,15 @@ export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
   const isHeroPage = pathname === "/";
+  const hasRole = !!userRole;
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUserRole(role ?? "");
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -43,7 +43,9 @@ export default function Navbar() {
     router.push("/login");
   };
 
-  const isTransparent = isHeroPage && !scrolled;
+  // If role exists → always solid bg (no transparent)
+  // If no role → transparent on hero page until scroll
+  const isTransparent = !hasRole && isHeroPage && !scrolled;
 
   return (
     <>
@@ -62,67 +64,76 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 shrink-0 no-underline"
+            className="flex items-center  shrink-0 no-underline"
           >
             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
-              <Package size={24} color="white" />
+              <Package size={32} color="white" />
             </div>
-            <span className="font-inter font-bold text-[15px] text-white tracking-tight hidden sm:block">
+            <span className="font-inter font-bold text-lg text-white tracking-tight hidden sm:block">
               Buan Enterprise
             </span>
           </Link>
 
-          {/* ── Center Nav — desktop only ── */}
-          <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
-            {navLinks.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`
-                    px-4 py-2 rounded-lg text-sm font-medium
-                    transition-all duration-200 no-underline
-                    ${
-                      active
-                        ? "text-white bg-white/12"
-                        : "text-white/70 hover:text-white hover:bg-white/10"
-                    }
-                  `}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* ── Center Nav — only shown when NO role ── */}
+          {!hasRole && (
+            <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+              {navLinks.map((link) => {
+                const active = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`
+                      px-4 py-2 rounded-lg text-sm font-medium
+                      transition-all duration-200 no-underline
+                      ${
+                        active
+                          ? "text-white bg-white/12"
+                          : "text-white/70 hover:text-white hover:bg-white/10"
+                      }
+                    `}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
 
-          {/* ── Right Side — desktop only ── */}
+          {/* ── Spacer when role exists (pushes right items to end) ── */}
+          {hasRole && <div className="flex-1" />}
+
+          {/* ── Right Side — desktop ── */}
           <div className="hidden lg:flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => router.push("/become-hub")}
-              className="
-                px-3 py-1.5 border border-white/20 rounded-lg
-                text-white/75 text-[13px] font-medium whitespace-nowrap
-                hover:border-white/50 hover:text-white hover:bg-white/8
-                transition-all duration-200 bg-transparent cursor-pointer
-              "
-            >
-              Become a Hub Provider
-            </button>
+            {/* Become buttons — only when NO role */}
+            {!hasRole && (
+              <>
+                <button
+                  onClick={() => router.push("/become-hub")}
+                  className="
+                    px-3 py-1.5 border border-white/20 rounded-lg
+                    text-white/75 text-[13px] font-medium whitespace-nowrap
+                    hover:border-white/50 hover:text-white hover:bg-white/8
+                    transition-all duration-200 bg-transparent cursor-pointer
+                  "
+                >
+                  Become a Hub Provider
+                </button>
+                <button
+                  onClick={() => router.push("/become-partner")}
+                  className="
+                    px-3 py-1.5 border border-white/20 rounded-lg
+                    text-white/75 text-[13px] font-medium whitespace-nowrap
+                    hover:border-white/50 hover:text-white hover:bg-white/8
+                    transition-all duration-200 bg-transparent cursor-pointer
+                  "
+                >
+                  Become a Partner
+                </button>
+              </>
+            )}
 
-            <button
-              onClick={() => router.push("/become-partner")}
-              className="
-                px-3 py-1.5 border border-white/20 rounded-lg
-                text-white/75 text-[13px] font-medium whitespace-nowrap
-                hover:border-white/50 hover:text-white hover:bg-white/8
-                transition-all duration-200 bg-transparent cursor-pointer
-              "
-            >
-              Become a Partner
-            </button>
-
-            {isAuthenticated ? (
+            {isAuthenticated && userRole ? (
               <>
                 {/* Bell */}
                 <button
@@ -146,31 +157,34 @@ export default function Navbar() {
                   </span>
                 </button>
 
-                {/* Profile Dropdown */}
-                  <Link href={'/profile'}
-                    className="
-                      w-9 h-9 rounded-full border border-white/20
-                      flex items-center justify-center text-white/70
-                      hover:text-white hover:border-white/50 hover:bg-white/10
-                      transition-all duration-200 bg-transparent cursor-pointer
-                    "
-                  >
-                    <User size={16} />
-                  </Link>
+                {/* Profile */}
+                <Link
+                  href="/profile"
+                  className="
+                    w-9 h-9 rounded-full border border-white/20
+                    flex items-center justify-center text-white/70
+                    hover:text-white hover:border-white/50 hover:bg-white/10
+                    transition-all duration-200 bg-transparent cursor-pointer
+                  "
+                >
+                  <User size={16} />
+                </Link>
               </>
             ) : (
-              <button
-                onClick={() => router.push("/login")}
-                className="
-                  px-5 py-2 bg-white/10 hover:bg-white/18
-                  border border-white/20 hover:border-white/40
-                  rounded-lg text-white text-sm font-semibold
-                  transition-all duration-200 cursor-pointer
-                  font-sora
-                "
-              >
-                Sign In
-              </button>
+              /* Sign In — only shown when no role */
+              !hasRole && (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="
+                    px-5 py-2 bg-white/10 hover:bg-white/18
+                    border border-white/20 hover:border-white/40
+                    rounded-lg text-white text-sm font-semibold
+                    transition-all duration-200 cursor-pointer font-sora
+                  "
+                >
+                  Sign In
+                </button>
+              )
             )}
           </div>
 
@@ -199,35 +213,54 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* Hamburger */}
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="
-                w-9 h-9 rounded-lg border border-white/20
-                flex flex-col items-center justify-center gap-1.5
-                hover:bg-white/10 hover:border-white/40
-                transition-all duration-200 bg-transparent cursor-pointer
-              "
-              aria-label="Open menu"
-            >
-              <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
-              <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[14px]" />
-              <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
-            </button>
+            {/* Hamburger — only when no role */}
+            {!hasRole && (
+              <button
+                onClick={() => setDrawerOpen(true)}
+                className="
+                  w-9 h-9 rounded-lg border border-white/20
+                  flex flex-col items-center justify-center gap-1.5
+                  hover:bg-white/10 hover:border-white/40
+                  transition-all duration-200 bg-transparent cursor-pointer
+                "
+                aria-label="Open menu"
+              >
+                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
+                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[14px]" />
+                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
+              </button>
+            )}
+
+            {/* Mobile profile icon when role exists */}
+            {hasRole && isAuthenticated && (
+              <Link
+                href="/profile"
+                className="
+                  w-9 h-9 rounded-full border border-white/20
+                  flex items-center justify-center text-white/70
+                  hover:text-white hover:bg-white/10
+                  transition-all duration-200
+                "
+              >
+                <User size={16} />
+              </Link>
+            )}
           </div>
         </div>
       </header>
 
-      {/* ── Mobile Drawer ── */}
-      <MobileDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        navLinks={navLinks}
-        pathname={pathname}
-        isAuthenticated={isAuthenticated}
-        user={user}
-        onLogout={handleLogout}
-      />
+      {/* ── Mobile Drawer — only when no role ── */}
+      {!hasRole && (
+        <MobileDrawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          navLinks={navLinks}
+          pathname={pathname}
+          isAuthenticated={isAuthenticated}
+          user={user}
+          onLogout={handleLogout}
+        />
+      )}
     </>
   );
 }

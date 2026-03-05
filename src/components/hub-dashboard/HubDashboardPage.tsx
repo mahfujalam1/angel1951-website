@@ -62,7 +62,7 @@ export default function HubDashboardPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 font-inter">
-            <div className="max-w-5xl mx-auto px-4 py-8">
+            <div className="max-w-6xl mx-auto px-4 py-8">
 
                 {/* ── Top Header ── */}
                 <div className="flex items-center justify-between mb-6">
