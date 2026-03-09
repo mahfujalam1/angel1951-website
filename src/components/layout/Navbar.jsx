@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { Bell, User, Package } from "lucide-react";
+import { Bell, User, Package, LogOut, ChevronDown } from "lucide-react";
 import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
@@ -23,6 +23,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileRef = useRef(null);
 
   const isHeroPage = pathname === "/";
   const hasRole = !!userRole;
@@ -38,13 +40,23 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleLogout = () => {
+    setProfileDropdownOpen(false);
     dispatch(logout());
     router.push("/login");
   };
 
-  // If role exists → always solid bg (no transparent)
-  // If no role → transparent on hero page until scroll
   const isTransparent = !hasRole && isHeroPage && !scrolled;
 
   return (
@@ -62,10 +74,7 @@ export default function Navbar() {
       >
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between gap-6">
           {/* ── Logo ── */}
-          <Link
-            href="/"
-            className="flex items-center  shrink-0 no-underline"
-          >
+          <Link href="/" className="flex items-center shrink-0 no-underline">
             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
               <Package size={32} color="white" />
             </div>
@@ -100,7 +109,7 @@ export default function Navbar() {
             </nav>
           )}
 
-          {/* ── Spacer when role exists (pushes right items to end) ── */}
+          {/* ── Spacer when role exists ── */}
           {hasRole && <div className="flex-1" />}
 
           {/* ── Right Side — desktop ── */}
@@ -133,7 +142,7 @@ export default function Navbar() {
               </>
             )}
 
-            {isAuthenticated && userRole ? (
+            {isAuthenticated || user ? (
               <>
                 {/* Bell */}
                 <button
@@ -146,32 +155,71 @@ export default function Navbar() {
                   "
                 >
                   <Bell size={16} />
-                  <span
-                    className="
-                    absolute -top-0.5 -right-0.5 w-4 h-4
-                    bg-[#F5A623] rounded-full text-[9px] font-bold
-                    flex items-center justify-center text-white
-                  "
-                  >
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#F5A623] rounded-full text-[9px] font-bold flex items-center justify-center text-white">
                     3
                   </span>
                 </button>
 
-                {/* Profile */}
-                <Link
-                  href="/profile"
-                  className="
-                    w-9 h-9 rounded-full border border-white/20
-                    flex items-center justify-center text-white/70
-                    hover:text-white hover:border-white/50 hover:bg-white/10
-                    transition-all duration-200 bg-transparent cursor-pointer
-                  "
-                >
-                  <User size={16} />
-                </Link>
+                {/* ── Profile with Dropdown ── */}
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={() => setProfileDropdownOpen((prev) => !prev)}
+                    className="
+                      w-9 h-9 rounded-full border border-white/20
+                      flex items-center justify-center text-white/70
+                      hover:text-white hover:border-white/50 hover:bg-white/10
+                      transition-all duration-200 bg-transparent cursor-pointer
+                    "
+                  >
+                    <User size={16} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {profileDropdownOpen && (
+                    <div
+                      className="
+                        absolute right-0 top-[calc(100%+10px)]
+                        w-44 rounded-xl overflow-hidden
+                        bg-white/10 backdrop-blur-2xl
+                        border border-white/15
+                        shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+                        animate-in fade-in slide-in-from-top-2 duration-200
+                      "
+                    >
+                      {/* Arrow pointer */}
+                      <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
+
+                      <Link
+                        href="/profile"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="
+                          flex items-center gap-2.5 px-4 py-3
+                          text-white/80 hover:text-white hover:bg-white/10
+                          text-sm font-medium transition-all duration-150
+                          no-underline border-b border-white/10
+                        "
+                      >
+                        <User size={14} className="shrink-0" />
+                        Profile
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="
+                          w-full flex items-center gap-2.5 px-4 py-3
+                          text-red-300 hover:text-red-200 hover:bg-red-500/15
+                          text-sm font-medium transition-all duration-150
+                          bg-transparent cursor-pointer text-left
+                        "
+                      >
+                        <LogOut size={14} className="shrink-0" />
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
-              /* Sign In — only shown when no role */
               !hasRole && (
                 <button
                   onClick={() => router.push("/login")}
@@ -201,13 +249,7 @@ export default function Navbar() {
                 "
               >
                 <Bell size={16} />
-                <span
-                  className="
-                  absolute -top-0.5 -right-0.5 w-4 h-4
-                  bg-[#F5A623] rounded-full text-[9px] font-bold
-                  flex items-center justify-center text-white
-                "
-                >
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#F5A623] rounded-full text-[9px] font-bold flex items-center justify-center text-white">
                   3
                 </span>
               </button>
@@ -231,19 +273,62 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* Mobile profile icon when role exists */}
+            {/* Mobile profile dropdown when role exists */}
             {hasRole && isAuthenticated && (
-              <Link
-                href="/profile"
-                className="
-                  w-9 h-9 rounded-full border border-white/20
-                  flex items-center justify-center text-white/70
-                  hover:text-white hover:bg-white/10
-                  transition-all duration-200
-                "
-              >
-                <User size={16} />
-              </Link>
+              <div className="relative" ref={profileRef}>
+                <button
+                  onClick={() => setProfileDropdownOpen((prev) => !prev)}
+                  className="
+                    w-9 h-9 rounded-full border border-white/20
+                    flex items-center justify-center text-white/70
+                    hover:text-white hover:bg-white/10
+                    transition-all duration-200 bg-transparent cursor-pointer
+                  "
+                >
+                  <User size={16} />
+                </button>
+
+                {profileDropdownOpen && (
+                  <div
+                    className="
+                      absolute right-0 top-[calc(100%+10px)]
+                      w-44 rounded-xl overflow-hidden
+                      bg-white/10 backdrop-blur-2xl
+                      border border-white/15
+                      shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+                    "
+                  >
+                    <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setProfileDropdownOpen(false)}
+                      className="
+                        flex items-center gap-2.5 px-4 py-3
+                        text-white/80 hover:text-white hover:bg-white/10
+                        text-sm font-medium transition-all duration-150
+                        no-underline border-b border-white/10
+                      "
+                    >
+                      <User size={14} className="shrink-0" />
+                      Profile
+                    </Link>
+
+                    <button
+                      onClick={handleLogout}
+                      className="
+                        w-full flex items-center gap-2.5 px-4 py-3
+                        text-red-300 hover:text-red-200 hover:bg-red-500/15
+                        text-sm font-medium transition-all duration-150
+                        bg-transparent cursor-pointer text-left
+                      "
+                    >
+                      <LogOut size={14} className="shrink-0" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

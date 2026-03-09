@@ -23,6 +23,21 @@ const serviceLinks = [
     "Personalized cargo",
 ];
 
+const subLinks = [
+    {
+        name:"Privacy Policy",
+        href:"/privacy-policy"
+    },
+    {
+        name:"Terms & Condition",
+        href:"/terms-condition"
+    },
+    {
+        name:"Cookie Policy",
+        href:"/privacy-policy"
+    },
+]
+
 export default function Footer() {
     const router = useRouter();
     const [email, setEmail] = useState("");
@@ -140,13 +155,14 @@ export default function Footer() {
                         © 2025 Buan Enterprise. All rights reserved.
                     </p>
                     <div className="flex items-center gap-5">
-                        {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((t) => (
-                            <button
-                                key={t}
+                        {subLinks.map((t) => (
+                            <Link
+                                key={t?.name}
+                                href={t?.href}
                                 className="text-xs text-white/45 hover:text-white/80 transition-colors"
                             >
-                                {t}
-                            </button>
+                                {t?.name}
+                            </Link>
                         ))}
                     </div>
                 </div>
