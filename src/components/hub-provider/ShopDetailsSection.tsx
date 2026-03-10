@@ -48,7 +48,7 @@ export default function ShopDetailsSection() {
                 />
 
                 {/* Business Type */}
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                     <label className="text-sm font-semibold text-gray-700">
                         Business Type:
                     </label>
@@ -75,7 +75,7 @@ export default function ShopDetailsSection() {
                             {errors.businessTypes.message}
                         </p>
                     )}
-                </div>
+                </div> */}
 
                 <FormInput
                     label="Full Address:"

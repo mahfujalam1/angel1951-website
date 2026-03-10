@@ -2,15 +2,15 @@ import { FAQ } from "@/types/service.types";
 
 export const faqs: FAQ[] = [
     {
-        q: "What is Buan Enterprise?",
-        a: "Buan Enterprise is a leading logistics company specializing in cargo shipping from China to Africa and beyond, offering sea cargo, air cargo, groupage, and specialized freight solutions.",
+        q: "What is Buan Logistics?",
+        a: "Buan Logistics is a leading logistics company specializing in cargo shipping from China to Africa and beyond, offering sea cargo, air cargo, groupage, and specialized freight solutions.",
     },
     {
-        q: "Where did the name Buan Enterprise come from?",
+        q: "Where did the name Buan Logistics come from?",
         a: "Buan is derived from a concept of bridging nations – connecting trade routes between Asia and Africa to facilitate seamless global commerce.",
     },
     {
-        q: "Who is Buan Enterprise for?",
+        q: "Who is Buan Logistics for?",
         a: "Our services cater to businesses of all sizes – from individual importers to large corporations needing bulk cargo solutions between China, Africa, and international destinations.",
     },
     {
@@ -19,7 +19,7 @@ export const faqs: FAQ[] = [
     },
     {
         q: "Is Buan a freight forwarder or a shipping line?",
-        a: "Buan Enterprise operates as a comprehensive freight forwarder, offering end-to-end logistics solutions including booking, customs clearance, and last-mile delivery.",
+        a: "Buan Logistics operates as a comprehensive freight forwarder, offering end-to-end logistics solutions including booking, customs clearance, and last-mile delivery.",
     },
     {
         q: "Do I get special pricing or discounts?",

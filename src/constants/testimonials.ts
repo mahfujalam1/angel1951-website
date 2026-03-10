@@ -12,7 +12,7 @@ export const testimonials: Testimonial[] = [
     },
     {
         quote:
-            "Working with Buan Enterprise has been a game-changer for our imports from China. Their sea cargo service is reliable, affordable, and the team is always responsive. Highly recommended!",
+            "Working with Buan Logistics has been a game-changer for our imports from China. Their sea cargo service is reliable, affordable, and the team is always responsive. Highly recommended!",
         name: "Kwame Asante",
         role: "Operations Manager",
         company: "West Africa Traders Ltd.",

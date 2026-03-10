@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Buan Enterprise — Track Goods Any Time",
+  title: "Buan Logistics — Track Goods Any Time",
   description: "Reliable logistics from China to Africa and beyond.",
 };
 

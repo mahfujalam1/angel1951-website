@@ -32,7 +32,7 @@ export default function LoginForm() {
         <div className="max-w-2xl mx-auto">
             <div className="text-center">
                 <h2 className="text-[28px] font-extrabold text-[#1F2937] font-sora mb-1">
-                    Welcome back to Buan Enterprise
+                    Welcome back to Buan Logistics
                 </h2>
                 <p className="text-sm text-[#6B7280] mb-8">Sign in to your account</p>
             </div>

@@ -85,7 +85,7 @@ export default function MobileDrawer({
                             <Package size={24} color="white" />
                         </div>
                         <span className="font-sora font-bold text-[14px] text-white">
-                            Buan Enterprise
+                            Buan Logistics
                         </span>
                     </div>
                     <button

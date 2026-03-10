@@ -61,7 +61,7 @@ export default function Footer() {
                                 <Package size={32} color="white" />
                             </div>
                             <span className="font-sora font-bold text-lg text-white">
-                                Buan Enterprise
+                                Buan Logistics
                             </span>
                         </div>
                         <p className="text-sm text-white/65 leading-relaxed max-w-[260px]">
@@ -152,7 +152,7 @@ export default function Footer() {
             <div className="border-t border-white/15">
                 <div className="max-w-[1400px] mx-auto px-10 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
                     <p className="text-sm text-white/50">
-                        © 2025 Buan Enterprise. All rights reserved.
+                        © 2025 Buan Logistics. All rights reserved.
                     </p>
                     <div className="flex items-center gap-5">
                         {subLinks.map((t) => (

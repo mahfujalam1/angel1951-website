@@ -10,8 +10,8 @@ import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Shipment Create", href: "/create" },
-  { label: "Order Status", href: "/status" },
+  { label: "Create My Shipment", href: "/create" },
+  { label: "Track My Shipment", href: "/status" },
 ];
 
 export default function Navbar() {
@@ -79,7 +79,7 @@ export default function Navbar() {
               <Package size={32} color="white" />
             </div>
             <span className="font-inter font-bold text-lg text-white tracking-tight hidden sm:block">
-              Buan Enterprise
+              Buan Logistics
             </span>
           </Link>
 
