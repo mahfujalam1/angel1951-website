@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import { Bell, User, Package, LogOut, ChevronDown } from "lucide-react";
+import { Bell, User, Package, LogOut } from "lucide-react";
 import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
@@ -22,17 +22,22 @@ export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [userRole, setUserRole] = useState(null);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const profileRef = useRef(null);
+  const [userRole, setUserRole] = useState("");
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUserRole(role || "");
+  }, []);
 
   const isHeroPage = pathname === "/";
   const hasRole = !!userRole;
 
-  useEffect(() => {
-    const role = localStorage.getItem("role");
-    setUserRole(role ?? "");
-  }, []);
+  console.log(hasRole, isAuthenticated, user)
+
+  // ── 3 clear conditions ──
+  const noRoleAuthenticated = !hasRole && isAuthenticated; // Become buttons + Bell + Profile
+  const roleAuthenticated = hasRole && isAuthenticated; // Bell + Profile only
+  const noRoleNotAuthenticated = !hasRole; // Sign In only
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -40,24 +45,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setProfileDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const handleLogout = () => {
-    setProfileDropdownOpen(false);
     dispatch(logout());
+    localStorage.removeItem("role");
+    setUserRole("");
     router.push("/login");
   };
 
-  const isTransparent = !hasRole && isHeroPage && !scrolled;
+  const isTransparent = noRoleNotAuthenticated && isHeroPage && !scrolled;
 
   return (
     <>
@@ -83,7 +78,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ── Center Nav — only shown when NO role ── */}
+          {/* ── Center Nav — only when no role ── */}
           {!hasRole && (
             <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
               {navLinks.map((link) => {
@@ -114,8 +109,8 @@ export default function Navbar() {
 
           {/* ── Right Side — desktop ── */}
           <div className="hidden lg:flex items-center gap-2 shrink-0">
-            {/* Become buttons — only when NO role */}
-            {!hasRole && (
+            {/* CASE 1: No role + Authenticated → Become buttons + Bell + Profile */}
+            {noRoleAuthenticated && (
               <>
                 <button
                   onClick={() => router.push("/become-hub")}
@@ -139,121 +134,39 @@ export default function Navbar() {
                 >
                   Become a Partner
                 </button>
+                <BellButton router={router} />
+                <ProfileDropdown handleLogout={handleLogout} />
               </>
             )}
 
-            {isAuthenticated || user ? (
+            {/* CASE 2: Role + Authenticated → Bell + Profile only */}
+            {roleAuthenticated && (
               <>
-                {/* Bell */}
-                <button
-                  onClick={() => router.push("/notifications")}
-                  className="
-                    relative w-9 h-9 rounded-full border border-white/20
-                    flex items-center justify-center text-white/70
-                    hover:text-white hover:border-white/50 hover:bg-white/10
-                    transition-all duration-200 bg-transparent cursor-pointer
-                  "
-                >
-                  <Bell size={16} />
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#F5A623] rounded-full text-[9px] font-bold flex items-center justify-center text-white">
-                    3
-                  </span>
-                </button>
-
-                {/* ── Profile with Dropdown ── */}
-                <div className="relative" ref={profileRef}>
-                  <button
-                    onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                    className="
-                      w-9 h-9 rounded-full border border-white/20
-                      flex items-center justify-center text-white/70
-                      hover:text-white hover:border-white/50 hover:bg-white/10
-                      transition-all duration-200 bg-transparent cursor-pointer
-                    "
-                  >
-                    <User size={16} />
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {profileDropdownOpen && (
-                    <div
-                      className="
-                        absolute right-0 top-[calc(100%+10px)]
-                        w-44 rounded-xl overflow-hidden
-                        bg-white/10 backdrop-blur-2xl
-                        border border-white/15
-                        shadow-[0_8px_32px_rgba(0,0,0,0.4)]
-                        animate-in fade-in slide-in-from-top-2 duration-200
-                      "
-                    >
-                      {/* Arrow pointer */}
-                      <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
-
-                      <Link
-                        href="/profile"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="
-                          flex items-center gap-2.5 px-4 py-3
-                          text-white/80 hover:text-white hover:bg-white/10
-                          text-sm font-medium transition-all duration-150
-                          no-underline border-b border-white/10
-                        "
-                      >
-                        <User size={14} className="shrink-0" />
-                        Profile
-                      </Link>
-
-                      <button
-                        onClick={handleLogout}
-                        className="
-                          w-full flex items-center gap-2.5 px-4 py-3
-                          text-red-300 hover:text-red-200 hover:bg-red-500/15
-                          text-sm font-medium transition-all duration-150
-                          bg-transparent cursor-pointer text-left
-                        "
-                      >
-                        <LogOut size={14} className="shrink-0" />
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <BellButton router={router} />
+                <ProfileDropdown handleLogout={handleLogout} />
               </>
-            ) : (
-              !hasRole && (
-                <button
-                  onClick={() => router.push("/login")}
-                  className="
-                    px-5 py-2 bg-white/10 hover:bg-white/18
-                    border border-white/20 hover:border-white/40
-                    rounded-lg text-white text-sm font-semibold
-                    transition-all duration-200 cursor-pointer font-sora
-                  "
-                >
-                  Sign In
-                </button>
-              )
+            )}
+
+            {/* CASE 3: No role + Not Authenticated → Sign In only */}
+            {noRoleNotAuthenticated && !isAuthenticated  && (
+              <button
+                onClick={() => router.push("/login")}
+                className="
+                  px-5 py-2 bg-white/10 hover:bg-white/18
+                  border border-white/20 hover:border-white/40
+                  rounded-lg text-white text-sm font-semibold
+                  transition-all duration-200 cursor-pointer font-sora
+                "
+              >
+                Sign In
+              </button>
             )}
           </div>
 
-          {/* ── Mobile Right: icons + hamburger ── */}
+          {/* ── Mobile Right ── */}
           <div className="flex lg:hidden items-center gap-2">
-            {isAuthenticated && (
-              <button
-                onClick={() => router.push("/notifications")}
-                className="
-                  relative w-9 h-9 rounded-full border border-white/20
-                  flex items-center justify-center text-white/70
-                  hover:text-white hover:bg-white/10
-                  transition-all duration-200 bg-transparent cursor-pointer
-                "
-              >
-                <Bell size={16} />
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#F5A623] rounded-full text-[9px] font-bold flex items-center justify-center text-white">
-                  3
-                </span>
-              </button>
-            )}
+            {/* Bell — shown when authenticated */}
+            {isAuthenticated && <BellButton router={router} />}
 
             {/* Hamburger — only when no role */}
             {!hasRole && (
@@ -267,68 +180,15 @@ export default function Navbar() {
                 "
                 aria-label="Open menu"
               >
-                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
-                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[14px]" />
-                <span className="w-4.5 h-0.5 bg-white/80 rounded-full block w-[18px]" />
+                <span className="h-0.5 bg-white/80 rounded-full block w-[18px]" />
+                <span className="h-0.5 bg-white/80 rounded-full block w-[14px]" />
+                <span className="h-0.5 bg-white/80 rounded-full block w-[18px]" />
               </button>
             )}
 
-            {/* Mobile profile dropdown when role exists */}
-            {hasRole && isAuthenticated && (
-              <div className="relative" ref={profileRef}>
-                <button
-                  onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                  className="
-                    w-9 h-9 rounded-full border border-white/20
-                    flex items-center justify-center text-white/70
-                    hover:text-white hover:bg-white/10
-                    transition-all duration-200 bg-transparent cursor-pointer
-                  "
-                >
-                  <User size={16} />
-                </button>
-
-                {profileDropdownOpen && (
-                  <div
-                    className="
-                      absolute right-0 top-[calc(100%+10px)]
-                      w-44 rounded-xl overflow-hidden
-                      bg-white/10 backdrop-blur-2xl
-                      border border-white/15
-                      shadow-[0_8px_32px_rgba(0,0,0,0.4)]
-                    "
-                  >
-                    <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
-
-                    <Link
-                      href="/profile"
-                      onClick={() => setProfileDropdownOpen(false)}
-                      className="
-                        flex items-center gap-2.5 px-4 py-3
-                        text-white/80 hover:text-white hover:bg-white/10
-                        text-sm font-medium transition-all duration-150
-                        no-underline border-b border-white/10
-                      "
-                    >
-                      <User size={14} className="shrink-0" />
-                      Profile
-                    </Link>
-
-                    <button
-                      onClick={handleLogout}
-                      className="
-                        w-full flex items-center gap-2.5 px-4 py-3
-                        text-red-300 hover:text-red-200 hover:bg-red-500/15
-                        text-sm font-medium transition-all duration-150
-                        bg-transparent cursor-pointer text-left
-                      "
-                    >
-                      <LogOut size={14} className="shrink-0" />
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
+            {/* Mobile Profile — only when role + authenticated */}
+            {roleAuthenticated && (
+              <ProfileDropdown handleLogout={handleLogout} />
             )}
           </div>
         </div>
@@ -347,5 +207,106 @@ export default function Navbar() {
         />
       )}
     </>
+  );
+}
+
+/* ── Bell Button ── */
+function BellButton({ router }) {
+  return (
+    <button
+      onClick={() => router.push("/notifications")}
+      className="
+        relative w-9 h-9 rounded-full border border-white/20
+        flex items-center justify-center text-white/70
+        hover:text-white hover:border-white/50 hover:bg-white/10
+        transition-all duration-200 bg-transparent cursor-pointer
+      "
+    >
+      <Bell size={16} />
+      <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#F5A623] rounded-full text-[9px] font-bold flex items-center justify-center text-white">
+        3
+      </span>
+    </button>
+  );
+}
+
+/* ── Profile Dropdown — manages its OWN state and ref ── */
+function ProfileDropdown({ handleLogout }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // Each instance has its own outside-click listener
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const onLogout = () => {
+    setOpen(false);
+    handleLogout();
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="
+          w-9 h-9 rounded-full border border-white/20
+          flex items-center justify-center text-white/70
+          hover:text-white hover:border-white/50 hover:bg-white/10
+          transition-all duration-200 bg-transparent cursor-pointer
+        "
+      >
+        <User size={16} />
+      </button>
+
+      {open && (
+        <div
+          className="
+            absolute right-0 top-[calc(100%+10px)]
+            w-44 rounded-xl overflow-hidden
+            bg-white/10 backdrop-blur-2xl
+            border border-white/15
+            shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+            animate-in fade-in slide-in-from-top-2 duration-200
+          "
+        >
+          {/* Arrow pointer */}
+          <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
+
+          <Link
+            href="/profile"
+            onClick={() => setOpen(false)}
+            className="
+              flex items-center gap-2.5 px-4 py-3
+              text-white/80 hover:text-white hover:bg-white/10
+              text-sm font-medium transition-all duration-150
+              no-underline border-b border-white/10
+            "
+          >
+            <User size={14} className="shrink-0" />
+            Profile
+          </Link>
+
+          <button
+            onClick={onLogout}
+            className="
+              w-full flex items-center gap-2.5 px-4 py-3
+              text-red-300 hover:text-red-200 hover:bg-red-500/15
+              text-sm font-medium transition-all duration-150
+              bg-transparent cursor-pointer text-left
+            "
+          >
+            <LogOut size={14} className="shrink-0" />
+            Sign Out
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
