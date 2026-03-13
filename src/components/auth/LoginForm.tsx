@@ -24,7 +24,7 @@ export default function LoginForm() {
     const handleSubmit = () => {
         if (!form.email || !form.password) return;
         // Demo: dispatch user directly
-        localStorage.setItem('role', 'hubProvider')
+        localStorage.setItem('role', 'customer')
         dispatch(setUser({ id: "1", name: "Demo User", email: form.email }));
         router.push("/");
     };

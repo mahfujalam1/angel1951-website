@@ -110,7 +110,7 @@ export default function Navbar() {
           {/* ── Right Side — desktop ── */}
           <div className="hidden lg:flex items-center gap-2 shrink-0">
             {/* CASE 1: No role + Authenticated → Become buttons + Bell + Profile */}
-            {noRoleAuthenticated && (
+            {noRoleAuthenticated  && (
               <>
                 <button
                   onClick={() => router.push("/become-hub")}
