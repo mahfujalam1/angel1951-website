@@ -57,12 +57,12 @@ export default function NigeriaToAbroadForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* ── Sender Information ── */}
             <div>
-                <h2 className={sectionTitle}>Sender Information:</h2>
+                <h2 className={sectionTitle}>Shipment Information:</h2>
 
                 {/* Shipment type */}
                 <div className="mb-4">
                     <div className="flex gap-4">
-                        {(["air_cargo", "sea_cargo"] as const).map((v) => (
+                        {(["Air Cargo", "Sea Cargo", "Frozen Cargo", "Fresh Cargo", "Express Cargo"] as const).map((v) => (
                             <label key={v} className="flex items-center gap-1.5 text-sm cursor-pointer">
                                 <input
                                     type="radio"
@@ -70,7 +70,7 @@ export default function NigeriaToAbroadForm() {
                                     {...register("shipmentType")}
                                     className="accent-blue-600"
                                 />
-                                {v === "air_cargo" ? "Air Cargo" : "Sea Cargo"}
+                                {v}
                             </label>
                         ))}
                     </div>
@@ -87,16 +87,19 @@ export default function NigeriaToAbroadForm() {
                         {errors.senderCountry && <p className={errorClass}>{errors.senderCountry.message}</p>}
                     </div>
                     <div>
-                        <label className={labelClass}>City</label>
-                        <input {...register("senderCity", { required: "Required" })} placeholder="Type here..." className={inputClass} />
-                        {errors.senderCity && <p className={errorClass}>{errors.senderCity.message}</p>}
-                    </div>
-                    <div>
                         <label className={labelClass}>State</label>
                         <input {...register("senderState", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                         {errors.senderState && <p className={errorClass}>{errors.senderState.message}</p>}
                     </div>
+                    <div>
+                        <label className={labelClass}>City</label>
+                        <input {...register("senderCity", { required: "Required" })} placeholder="Type here..." className={inputClass} />
+                        {errors.senderCity && <p className={errorClass}>{errors.senderCity.message}</p>}
+                    </div>
+
                 </div>
+
+                <h1 className="mb-3 font-semibold">Sender Information:</h1>
 
                 <div className="mb-3">
                     <label className={labelClass}>Full name</label>
@@ -126,9 +129,35 @@ export default function NigeriaToAbroadForm() {
                     <input {...register("senderAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                     {errors.senderAddress && <p className={errorClass}>{errors.senderAddress.message}</p>}
                 </div>
+                <div className="mb-4">
+                     <h1 className="font-semibold mb-2">Insurance</h1>
+                    <div className="flex gap-4">
+                        {(["Yes", "No"] as const).map((v) => (
+                            <label key={v} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                                <input
+                                    type="radio"
+                                    value={v}
+                                    {...register("shipmentType")}
+                                    className="accent-blue-600"
+                                />
+                                {v}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <label className={labelClass}>Values of Goods</label>
+                    <input {...register("senderAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
+                    {errors.senderAddress && <p className={errorClass}>{errors.senderAddress.message}</p>}
+                </div>
+                <div className="mb-3">
+                    <label className={labelClass}>Kilos of Goods</label>
+                    <input {...register("senderAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
+                    {errors.senderAddress && <p className={errorClass}>{errors.senderAddress.message}</p>}
+                </div>
 
                 {/* Select (what picking up) */}
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Select</label>
                     <select {...register("whatPickingUp", { required: "Required" })} className={inputClass}>
                         <option value="">Select</option>
@@ -139,10 +168,10 @@ export default function NigeriaToAbroadForm() {
                         <option value="others">Others</option>
                     </select>
                     {errors.whatPickingUp && <p className={errorClass}>{errors.whatPickingUp.message}</p>}
-                </div>
+                </div> */}
 
                 {/* Shipping Type */}
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Shipping Type</label>
                     <select {...register("senderShippingType", { required: "Required" })} className={inputClass}>
                         <option value="">Select</option>
@@ -151,6 +180,18 @@ export default function NigeriaToAbroadForm() {
                         <option value="overnight">Overnight</option>
                     </select>
                     {errors.senderShippingType && <p className={errorClass}>{errors.senderShippingType.message}</p>}
+                </div> */}
+                <div className="mb-3">
+                    <label className={labelClass}>Select Hub</label>
+                    <select {...register("receiverSelectHub", { required: "Required" })} className={inputClass}>
+                        <option value="">Select</option>
+                        <option value="hub_1">Hub Lagos</option>
+                        <option value="hub_2">Hub Abuja</option>
+                        <option value="hub_3">Hub Port Harcourt</option>
+                        <option value="hub_3">Benin</option>
+                        <option value="hub_3">Ibadan</option>
+                    </select>
+                    {errors.receiverSelectHub && <p className={errorClass}>{errors.receiverSelectHub.message}</p>}
                 </div>
             </div>
 
@@ -161,7 +202,7 @@ export default function NigeriaToAbroadForm() {
                 <h2 className={sectionTitle}>Receiver Information:</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                    <div>
+                    {/* <div>
                         <label className={labelClass}>Country</label>
                         <select {...register("receiverCountry", { required: "Required" })} className={inputClass}>
                             <option value="">Select</option>
@@ -181,7 +222,7 @@ export default function NigeriaToAbroadForm() {
                         <label className={labelClass}>State</label>
                         <input {...register("receiverState", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                         {errors.receiverState && <p className={errorClass}>{errors.receiverState.message}</p>}
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="mb-3">
@@ -208,12 +249,17 @@ export default function NigeriaToAbroadForm() {
                 </div>
 
                 <div className="mb-3">
-                    <label className={labelClass}>Address</label>
+                    <label className={labelClass}>Address line 1</label>
+                    <input {...register("receiverAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
+                    {errors.receiverAddress && <p className={errorClass}>{errors.receiverAddress.message}</p>}
+                </div>
+                <div className="mb-3">
+                    <label className={labelClass}>Postal  / Zip Code</label>
                     <input {...register("receiverAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                     {errors.receiverAddress && <p className={errorClass}>{errors.receiverAddress.message}</p>}
                 </div>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Select Hub</label>
                     <select {...register("receiverSelectHub", { required: "Required" })} className={inputClass}>
                         <option value="">Select</option>
@@ -222,9 +268,9 @@ export default function NigeriaToAbroadForm() {
                         <option value="hub_3">Hub Port Harcourt</option>
                     </select>
                     {errors.receiverSelectHub && <p className={errorClass}>{errors.receiverSelectHub.message}</p>}
-                </div>
+                </div> */}
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Shipping Type</label>
                     <select {...register("receiverShippingType", { required: "Required" })} className={inputClass}>
                         <option value="">Select</option>
@@ -233,7 +279,7 @@ export default function NigeriaToAbroadForm() {
                         <option value="overnight">Overnight</option>
                     </select>
                     {errors.receiverShippingType && <p className={errorClass}>{errors.receiverShippingType.message}</p>}
-                </div>
+                </div> */}
             </div>
 
             <hr className="border-gray-100" />
@@ -255,6 +301,8 @@ export default function NigeriaToAbroadForm() {
                         <option value="hub_1">Hub Lagos</option>
                         <option value="hub_2">Hub Abuja</option>
                         <option value="hub_3">Hub Port Harcourt</option>
+                        <option value="hub_4">Benin</option>
+                        <option value="hub_5">Ibadan</option>
                     </select>
                     {errors.pickupSelectHub && <p className={errorClass}>{errors.pickupSelectHub.message}</p>}
                 </div>

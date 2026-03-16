@@ -52,7 +52,7 @@ export default function OutPartnerViewDetails({ data, onEdit }: ViewDetailsProps
 
                 <div className="flex flex-col gap-5">
                     {/* 1. Shop Details */}
-                    <SectionCard number={1} title="Shop Details:">
+                    <SectionCard number={1} title="Business Details:">
                         <div className="flex flex-col">
                             <DetailRow label="Legal Name" value={<strong>{data.legalName}</strong>} />
                             <DetailRow label="Trading Name" value={data.tradingName || "—"} />
@@ -92,7 +92,7 @@ export default function OutPartnerViewDetails({ data, onEdit }: ViewDetailsProps
                     </SectionCard>
 
                     {/* 4. Requested Services */}
-                    <SectionCard number={4} title="Requested Overseas Services:">
+                    {/* <SectionCard number={4} title="Requested Overseas Services:">
                         <div className="flex flex-col">
                             <DetailRow
                                 label="Handled Delivery Before:"
@@ -105,7 +105,7 @@ export default function OutPartnerViewDetails({ data, onEdit }: ViewDetailsProps
                             <DetailRow label="Services Required:" value={data.servicesRequired || "—"} />
                             <DetailRow label="Countries Ship To:" value={data.countriesShipToService || "—"} />
                         </div>
-                    </SectionCard>
+                    </SectionCard> */}
 
                     {/* 5. Space Images */}
                     {(data.imagePreviews ?? []).length > 0 && (

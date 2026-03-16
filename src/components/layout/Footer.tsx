@@ -51,7 +51,7 @@ export default function Footer() {
     return (
         <footer className="bg-[#1A3BDB] text-white">
             {/* ── Main Content ── */}
-            <div className="max-w-[1400px] mx-auto px-10 pt-14 pb-12">
+            <div className="max-w-[1800px] mx-auto px-10 pt-14 pb-12">
                 <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_2fr] gap-12">
 
                     {/* Brand */}

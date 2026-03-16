@@ -11,9 +11,19 @@ import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
 import type { LoginFormData } from "@/types/auth.types";
 
+type Role = "hubProvider" | "partner" | "customer";
+
+const ROLES: { value: Role; label: string }[] = [
+    { value: "hubProvider", label: "Hub Provider" },
+    { value: "partner", label: "Partner" },
+    { value: "customer", label: "Customer" },
+];
+
 export default function LoginForm() {
     const router = useRouter();
     const dispatch = useAppDispatch();
+
+    const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 
     const [form, setForm] = useState<LoginFormData>({
         email: "",
@@ -22,12 +32,18 @@ export default function LoginForm() {
     });
 
     const handleSubmit = () => {
-        if (!form.email || !form.password) return;
-        // Demo: dispatch user directly
-        localStorage.setItem('role', 'customer')
+        if (!form.email || !form.password || !selectedRole) return;
+
+        // customer হলে role empty string, বাকিগুলো role value সেট হবে
+        const roleValue = selectedRole === "customer" ? "" : selectedRole;
+        localStorage.setItem("role", roleValue);
+        localStorage.setItem('email', form.email)
+
         dispatch(setUser({ id: "1", name: "Demo User", email: form.email }));
         router.push("/");
     };
+
+    const isLoginDisabled = !selectedRole || !form.email || !form.password;
 
     return (
         <div className="max-w-2xl mx-auto">
@@ -79,10 +95,39 @@ export default function LoginForm() {
                 </button>
             </div>
 
+            {/* Role Selection */}
+            <div className="mb-6">
+                <Label className="text-sm font-semibold text-[#1F2937] mb-3 block">
+                    Select your role
+                </Label>
+                <div className="flex gap-3">
+                    {ROLES.map(({ value, label }) => {
+                        const isSelected = selectedRole === value;
+                        return (
+                            <button
+                                key={value}
+                                type="button"
+                                onClick={() => setSelectedRole(value)}
+                                className={`
+                                    flex-1 h-11 rounded-xl border-2 text-sm font-semibold transition-all duration-150
+                                    ${isSelected
+                                        ? "border-[#1A3BDB] bg-[#EEF2FF] text-[#1A3BDB]"
+                                        : "border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#1A3BDB] hover:text-[#1A3BDB]"
+                                    }
+                                `}
+                            >
+                                {label}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             {/* Submit */}
             <Button
                 onClick={handleSubmit}
-                className="w-full h-12 bg-[#1A3BDB] hover:bg-[#1230B3] text-white font-bold text-[15px] rounded-xl"
+                disabled={isLoginDisabled}
+                className="w-full h-12 bg-[#1A3BDB] hover:bg-[#1230B3] text-white font-bold text-[15px] rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
             >
                 Login
             </Button>

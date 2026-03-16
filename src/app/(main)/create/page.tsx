@@ -10,7 +10,7 @@ type Tab = "abroad_to_nigeria" | "nigeria_to_abroad";
 
 export default function ShippingInformationPage() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<Tab>("abroad_to_nigeria");
+    const [activeTab, setActiveTab] = useState<Tab>("nigeria_to_abroad");
 
     return (
         <div className="min-h-screen bg-white">
@@ -28,23 +28,24 @@ export default function ShippingInformationPage() {
             {/* Tab switcher */}
             <div className="flex justify-center gap-2 py-4 px-4">
                 <button
-                    onClick={() => setActiveTab("abroad_to_nigeria")}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === "abroad_to_nigeria"
-                            ? "bg-gray-900 text-white"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                >
-                    Shipment from abroad to Nigeria
-                </button>
-                <button
                     onClick={() => setActiveTab("nigeria_to_abroad")}
                     className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === "nigeria_to_abroad"
-                            ? "bg-gray-900 text-white"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-gray-900 text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         }`}
                 >
                     Nigeria to abroad
                 </button>
+                <button
+                    onClick={() => setActiveTab("abroad_to_nigeria")}
+                    className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === "abroad_to_nigeria"
+                        ? "bg-gray-900 text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        }`}
+                >
+                    Shipment from abroad to Nigeria
+                </button>
+
             </div>
 
             {/* Form area */}

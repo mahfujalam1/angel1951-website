@@ -25,7 +25,7 @@ export default function SpaceImageSection() {
     };
 
     return (
-        <SectionCard number={6} title="Space Image:">
+        <SectionCard number={6} title="Photos of your shop:">
             <div className="flex flex-wrap gap-3">
                 {/* Existing previews */}
                 {previews.map((src, i) => (

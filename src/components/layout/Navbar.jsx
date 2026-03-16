@@ -3,8 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { logout } from "@/store/slices/authSlice";
 import { Bell, User, Package, LogOut } from "lucide-react";
 import MobileDrawer from "./MobileDrawer";
 
@@ -17,27 +15,26 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { isAuthenticated, user } = useAppSelector((s) => s.auth);
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const role = localStorage.getItem("role");
+    const email = localStorage.getItem("email");
     setUserRole(role || "");
+    setIsAuthenticated(!!email);
   }, []);
 
   const isHeroPage = pathname === "/";
   const hasRole = !!userRole;
 
-  console.log(hasRole, isAuthenticated, user)
-
   // ── 3 clear conditions ──
   const noRoleAuthenticated = !hasRole && isAuthenticated; // Become buttons + Bell + Profile
   const roleAuthenticated = hasRole && isAuthenticated; // Bell + Profile only
-  const noRoleNotAuthenticated = !hasRole; // Sign In only
+  const noRoleNotAuthenticated = !hasRole && !isAuthenticated; // Sign In only
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -46,13 +43,14 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    dispatch(logout());
     localStorage.removeItem("role");
+    localStorage.removeItem("email");
     setUserRole("");
+    setIsAuthenticated(false);
     router.push("/login");
   };
 
-  const isTransparent = noRoleNotAuthenticated && isHeroPage && !scrolled;
+  const isTransparent = !hasRole && isHeroPage && !scrolled;
 
   return (
     <>
@@ -67,7 +65,7 @@ export default function Navbar() {
           }
         `}
       >
-        <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between gap-6">
+        <div className="max-w-[1800px] mx-auto px-6 h-full flex items-center justify-between gap-6">
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center shrink-0 no-underline">
             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
@@ -110,7 +108,7 @@ export default function Navbar() {
           {/* ── Right Side — desktop ── */}
           <div className="hidden lg:flex items-center gap-2 shrink-0">
             {/* CASE 1: No role + Authenticated → Become buttons + Bell + Profile */}
-            {noRoleAuthenticated  && (
+            {noRoleAuthenticated && (
               <>
                 <button
                   onClick={() => router.push("/become-hub")}
@@ -148,7 +146,7 @@ export default function Navbar() {
             )}
 
             {/* CASE 3: No role + Not Authenticated → Sign In only */}
-            {noRoleNotAuthenticated && !isAuthenticated  && (
+            {noRoleNotAuthenticated && (
               <button
                 onClick={() => router.push("/login")}
                 className="
@@ -202,7 +200,6 @@ export default function Navbar() {
           navLinks={navLinks}
           pathname={pathname}
           isAuthenticated={isAuthenticated}
-          user={user}
           onLogout={handleLogout}
         />
       )}
@@ -235,7 +232,6 @@ function ProfileDropdown({ handleLogout }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
-  // Each instance has its own outside-click listener
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {

@@ -24,7 +24,7 @@ export default function PartnerShopDetailsSection() {
     const selected = watch("yearsInOperation");
 
     return (
-        <SectionCard number={1} title="Shop Details:">
+        <SectionCard number={1} title="Business Details:">
             <div className="flex flex-col gap-4">
                 <FormInput
                     label="Legal Name of Company / Business:"

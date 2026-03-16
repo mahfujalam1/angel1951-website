@@ -17,7 +17,7 @@ export default function RequestedServicesSection() {
         <SectionCard number={4} title="Requested Overseas Services:">
             <div className="flex flex-col gap-5">
                 {/* Q1 */}
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium text-gray-700">
                         Have you handled delivery or logistics services before?
                     </p>
@@ -35,10 +35,10 @@ export default function RequestedServicesSection() {
                             </label>
                         ))}
                     </div>
-                </div>
+                </div> */}
 
                 {/* Q2 */}
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium text-gray-700">
                         Are you willing to commit to being pickup hub for at least 6 months?
                     </p>
@@ -56,7 +56,7 @@ export default function RequestedServicesSection() {
                             </label>
                         ))}
                     </div>
-                </div>
+                </div> */}
 
                 <FormTextarea
                     label="Services You Require Us to Provide:"

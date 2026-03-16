@@ -55,7 +55,7 @@ export default function HubProviderViewDetails({ data, onEdit }: ViewDetailsProp
 
                 <div className="flex flex-col gap-5">
                     {/* 1. Shop Details */}
-                    <SectionCard number={1} title="Shop Details:">
+                    <SectionCard number={1} title="Business Details:">
                         <div className="flex flex-col">
                             <DetailRow label="Shop Name" value={<strong>{data.shopName}</strong>} />
                             <DetailRow

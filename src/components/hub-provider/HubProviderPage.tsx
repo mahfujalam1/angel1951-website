@@ -76,7 +76,7 @@ export default function HubProviderPage() {
                     {/* Page Header */}
                     <div className="text-center mb-8">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 font-inter">
-                            Become a Out Hub Provider
+                            Become a Hub Provider
                         </h1>
                         <p className="text-sm sm:text-base text-gray-500 mt-2 max-w-md mx-auto leading-relaxed">
                             Sign up your shop to become pickup hub partner. Please fill out the
