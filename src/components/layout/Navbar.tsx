@@ -53,7 +53,7 @@ export default function Navbar() {
 
   // Dashboard shows for all authenticated users
   // Public nav for non-authenticated, auth nav (with Dashboard) for authenticated
-  const activeNavLinks = isAuthenticated ? authNavLinks : publicNavLinks;
+  const activeNavLinks = isAuthenticated && hasRole ? authNavLinks : publicNavLinks;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
