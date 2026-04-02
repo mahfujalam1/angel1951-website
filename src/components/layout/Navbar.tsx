@@ -6,11 +6,25 @@ import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, Package, LogOut } from "lucide-react";
 import MobileDrawer from "./MobileDrawer";
 
-const navLinks = [
+type NavLink = {
+  label: string;
+  href: string;
+};
+
+const publicNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "Create My Shipment", href: "/create" },
-  { label: "Track My Shipment", href: "/status" },
+  { label: "Create Shipment", href: "/create" },
+  { label: "Track Shipment", href: "/status" },
 ];
+
+const authNavLinks: NavLink[] = [
+  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Create Shipment", href: "/create" },
+  { label: "Track Shipment", href: "/status" },
+];
+
+const PROVIDER_ROLES = ["hubProvider", "partner"];
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,11 +44,16 @@ export default function Navbar() {
 
   const isHeroPage = pathname === "/";
   const hasRole = !!userRole;
+  const isProviderRole = PROVIDER_ROLES.includes(userRole);
 
-  // ── 3 clear conditions ──
-  const noRoleAuthenticated = !hasRole && isAuthenticated; // Become buttons + Bell + Profile
-  const roleAuthenticated = hasRole && isAuthenticated; // Bell + Profile only
-  const noRoleNotAuthenticated = !hasRole && !isAuthenticated; // Sign In only
+  const noRoleAuthenticated = !hasRole && isAuthenticated;
+  const roleAuthenticated = hasRole && isAuthenticated;
+  const noRoleNotAuthenticated = !hasRole && !isAuthenticated;
+  const showNav = !hasRole || isProviderRole;
+
+  // Dashboard shows for all authenticated users
+  // Public nav for non-authenticated, auth nav (with Dashboard) for authenticated
+  const activeNavLinks = isAuthenticated ? authNavLinks : publicNavLinks;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -50,7 +69,7 @@ export default function Navbar() {
     router.push("/login");
   };
 
-  const isTransparent = !hasRole && isHeroPage && !scrolled;
+  const isTransparent = isHeroPage && !scrolled;
 
   return (
     <>
@@ -58,10 +77,9 @@ export default function Navbar() {
         className={`
           fixed top-0 left-0 right-0 z-50 h-20
           transition-all duration-500 ease-in-out
-          ${
-            isTransparent
-              ? "bg-transparent border-transparent"
-              : "bg-primary/95 backdrop-blur-xl border-white/8 shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
+          ${isTransparent
+            ? "bg-transparent border-transparent"
+            : "bg-primary/95 backdrop-blur-xl border-white/8 shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
           }
         `}
       >
@@ -76,10 +94,10 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ── Center Nav — only when no role ── */}
-          {!hasRole && (
+          {/* ── Center Nav ── */}
+          {showNav && (
             <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
-              {navLinks.map((link) => {
+              {activeNavLinks.map((link) => {
                 const active = pathname === link.href;
                 return (
                   <Link
@@ -88,10 +106,9 @@ export default function Navbar() {
                     className={`
                       px-4 py-2 rounded-lg text-sm font-medium
                       transition-all duration-200 no-underline
-                      ${
-                        active
-                          ? "text-white bg-white/12"
-                          : "text-white/70 hover:text-white hover:bg-white/10"
+                      ${active
+                        ? "text-white bg-white/12"
+                        : "text-white/70 hover:text-white hover:bg-white/10"
                       }
                     `}
                   >
@@ -102,8 +119,8 @@ export default function Navbar() {
             </nav>
           )}
 
-          {/* ── Spacer when role exists ── */}
-          {hasRole && <div className="flex-1" />}
+          {/* ── Spacer when role exists but NOT a provider role ── */}
+          {hasRole && !isProviderRole && <div className="flex-1" />}
 
           {/* ── Right Side — desktop ── */}
           <div className="hidden lg:flex items-center gap-2 shrink-0">
@@ -163,11 +180,9 @@ export default function Navbar() {
 
           {/* ── Mobile Right ── */}
           <div className="flex lg:hidden items-center gap-2">
-            {/* Bell — shown when authenticated */}
             {isAuthenticated && <BellButton router={router} />}
 
-            {/* Hamburger — only when no role */}
-            {!hasRole && (
+            {showNav && (
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="
@@ -184,22 +199,23 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* Mobile Profile — only when role + authenticated */}
-            {roleAuthenticated && (
+            {roleAuthenticated && !isProviderRole && (
               <ProfileDropdown handleLogout={handleLogout} />
             )}
           </div>
         </div>
       </header>
 
-      {/* ── Mobile Drawer — only when no role ── */}
-      {!hasRole && (
+      {/* ── Mobile Drawer ── */}
+      {showNav && (
         <MobileDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          navLinks={navLinks}
+          navLinks={activeNavLinks}
           pathname={pathname}
           isAuthenticated={isAuthenticated}
+          isProviderRole={isProviderRole}  
+          user={null} 
           onLogout={handleLogout}
         />
       )}
@@ -208,7 +224,11 @@ export default function Navbar() {
 }
 
 /* ── Bell Button ── */
-function BellButton({ router }) {
+interface BellButtonProps {
+  router: ReturnType<typeof useRouter>;
+}
+
+function BellButton({ router }: BellButtonProps) {
   return (
     <button
       onClick={() => router.push("/notifications")}
@@ -227,14 +247,18 @@ function BellButton({ router }) {
   );
 }
 
-/* ── Profile Dropdown — manages its OWN state and ref ── */
-function ProfileDropdown({ handleLogout }) {
+/* ── Profile Dropdown ── */
+interface ProfileDropdownProps {
+  handleLogout: () => void;
+}
+
+function ProfileDropdown({ handleLogout }: ProfileDropdownProps) {
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
@@ -272,7 +296,6 @@ function ProfileDropdown({ handleLogout }) {
             animate-in fade-in slide-in-from-top-2 duration-200
           "
         >
-          {/* Arrow pointer */}
           <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white/10 border-l border-t border-white/15" />
 
           <Link

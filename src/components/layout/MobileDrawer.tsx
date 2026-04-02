@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import {
     X, Home, Plus, Radio, Building2,
     Handshake, User, LogOut, Bell,
-    Package,
+    Package, LayoutDashboard,
 } from "lucide-react";
 
 interface NavLink {
@@ -20,14 +20,16 @@ interface MobileDrawerProps {
     navLinks: NavLink[];
     pathname: string;
     isAuthenticated: boolean;
+    isProviderRole: boolean;
     user: { name?: string; email?: string } | null;
     onLogout: () => void;
 }
 
 const navIcons: Record<string, React.ReactNode> = {
-    Home: <Home size={17} />,
-    Create: <Plus size={17} />,
-    Status: <Radio size={17} />,
+    "Home": <Home size={17} />,
+    "Dashboard": <LayoutDashboard size={17} />,
+    "Create Shipment": <Plus size={17} />,
+    "Track Shipment": <Radio size={17} />,
 };
 
 export default function MobileDrawer({
@@ -36,18 +38,14 @@ export default function MobileDrawer({
     navLinks,
     pathname,
     isAuthenticated,
+    isProviderRole,
     user,
     onLogout,
 }: MobileDrawerProps) {
     const router = useRouter();
 
-    // close on outside scroll lock
     useEffect(() => {
-        if (open) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
+        document.body.style.overflow = open ? "hidden" : "";
         return () => { document.body.style.overflow = ""; };
     }, [open]);
 
@@ -62,21 +60,21 @@ export default function MobileDrawer({
             <div
                 onClick={onClose}
                 className={`
-          fixed inset-0 z-[998] bg-black/60 backdrop-blur-sm
-          transition-opacity duration-300
-          ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
-        `}
+                    fixed inset-0 z-[998] bg-black/60 backdrop-blur-sm
+                    transition-opacity duration-300
+                    ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+                `}
             />
 
             {/* ── Drawer Panel ── */}
             <div
                 className={`
-          fixed top-0 left-0 bottom-0 z-[999]
-          w-[280px] bg-[#0A0E1A]
-          flex flex-col
-          transition-transform duration-300 ease-in-out
-          ${open ? "translate-x-0" : "-translate-x-full"}
-        `}
+                    fixed top-0 left-0 bottom-0 z-[999]
+                    w-[280px] bg-[#0A0E1A]
+                    flex flex-col
+                    transition-transform duration-300 ease-in-out
+                    ${open ? "translate-x-0" : "-translate-x-full"}
+                `}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
@@ -91,11 +89,11 @@ export default function MobileDrawer({
                     <button
                         onClick={onClose}
                         className="
-              w-8 h-8 rounded-lg border border-white/15
-              flex items-center justify-center
-              text-white/60 hover:text-white hover:bg-white/10
-              transition-all duration-200 bg-transparent cursor-pointer
-            "
+                            w-8 h-8 rounded-lg border border-white/15
+                            flex items-center justify-center
+                            text-white/60 hover:text-white hover:bg-white/10
+                            transition-all duration-200 bg-transparent cursor-pointer
+                        "
                     >
                         <X size={16} />
                     </button>
@@ -105,10 +103,7 @@ export default function MobileDrawer({
                 {isAuthenticated && user && (
                     <div className="px-5 py-4 border-b border-white/8">
                         <div className="flex items-center gap-3">
-                            <div className="
-                w-10 h-10 rounded-full bg-[#1A3BDB]
-                flex items-center justify-center text-white
-              ">
+                            <div className="w-10 h-10 rounded-full bg-[#1A3BDB] flex items-center justify-center text-white">
                                 <User size={18} />
                             </div>
                             <div>
@@ -136,14 +131,14 @@ export default function MobileDrawer({
                                 href={link.href}
                                 onClick={onClose}
                                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  text-sm font-medium transition-all duration-200
-                  mb-1 no-underline
-                  ${active
+                                    flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                    text-sm font-medium transition-all duration-200
+                                    mb-1 no-underline
+                                    ${active
                                         ? "bg-[#1A3BDB] text-white"
                                         : "text-white/65 hover:text-white hover:bg-white/8"
                                     }
-                `}
+                                `}
                             >
                                 <span className={active ? "text-white" : "text-white/50"}>
                                     {navIcons[link.label]}
@@ -156,41 +151,43 @@ export default function MobileDrawer({
                         );
                     })}
 
-                    {/* Divider */}
-                    <div className="border-t border-white/8 my-4" />
+                    {/* Partnership section — hidden for provider/partner roles */}
+                    {!isProviderRole && (
+                        <>
+                            <div className="border-t border-white/8 my-4" />
+                            <p className="text-[11px] font-semibold text-white/30 uppercase tracking-widest px-3 mb-2">
+                                Partnership
+                            </p>
 
-                    {/* Partner Links */}
-                    <p className="text-[11px] font-semibold text-white/30 uppercase tracking-widest px-3 mb-2">
-                        Partnership
-                    </p>
+                            <button
+                                onClick={() => navigate("/become-hub")}
+                                className="
+                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                    text-sm font-medium text-white/65
+                                    hover:text-white hover:bg-white/8
+                                    transition-all duration-200 bg-transparent cursor-pointer
+                                    mb-1 text-left
+                                "
+                            >
+                                <span className="text-white/50"><Building2 size={17} /></span>
+                                Become a Hub Provider
+                            </button>
 
-                    <button
-                        onClick={() => navigate("/become-hub")}
-                        className="
-              w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-              text-sm font-medium text-white/65
-              hover:text-white hover:bg-white/8
-              transition-all duration-200 bg-transparent cursor-pointer
-              mb-1 text-left
-            "
-                    >
-                        <span className="text-white/50"><Building2 size={17} /></span>
-                        Become a Hub Provider
-                    </button>
-
-                    <button
-                        onClick={() => navigate("/become-partner")}
-                        className="
-              w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-              text-sm font-medium text-white/65
-              hover:text-white hover:bg-white/8
-              transition-all duration-200 bg-transparent cursor-pointer
-              mb-1 text-left
-            "
-                    >
-                        <span className="text-white/50"><Handshake size={17} /></span>
-                        Become a Partner
-                    </button>
+                            <button
+                                onClick={() => navigate("/become-partner")}
+                                className="
+                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                    text-sm font-medium text-white/65
+                                    hover:text-white hover:bg-white/8
+                                    transition-all duration-200 bg-transparent cursor-pointer
+                                    mb-1 text-left
+                                "
+                            >
+                                <span className="text-white/50"><Handshake size={17} /></span>
+                                Become a Partner
+                            </button>
+                        </>
+                    )}
 
                     {/* Account Links — if logged in */}
                     {isAuthenticated && (
@@ -203,12 +200,12 @@ export default function MobileDrawer({
                             <button
                                 onClick={() => navigate("/profile")}
                                 className="
-                  w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  text-sm font-medium text-white/65
-                  hover:text-white hover:bg-white/8
-                  transition-all duration-200 bg-transparent cursor-pointer
-                  mb-1 text-left
-                "
+                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                    text-sm font-medium text-white/65
+                                    hover:text-white hover:bg-white/8
+                                    transition-all duration-200 bg-transparent cursor-pointer
+                                    mb-1 text-left
+                                "
                             >
                                 <span className="text-white/50"><User size={17} /></span>
                                 My Profile
@@ -217,20 +214,20 @@ export default function MobileDrawer({
                             <button
                                 onClick={() => navigate("/notifications")}
                                 className="
-                  w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  text-sm font-medium text-white/65
-                  hover:text-white hover:bg-white/8
-                  transition-all duration-200 bg-transparent cursor-pointer
-                  mb-1 text-left
-                "
+                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                    text-sm font-medium text-white/65
+                                    hover:text-white hover:bg-white/8
+                                    transition-all duration-200 bg-transparent cursor-pointer
+                                    mb-1 text-left
+                                "
                             >
                                 <span className="text-white/50 relative">
                                     <Bell size={17} />
                                     <span className="
-                    absolute -top-1 -right-1 w-3.5 h-3.5
-                    bg-[#F5A623] rounded-full text-[8px] font-bold
-                    flex items-center justify-center text-white
-                  ">3</span>
+                                        absolute -top-1 -right-1 w-3.5 h-3.5
+                                        bg-[#F5A623] rounded-full text-[8px] font-bold
+                                        flex items-center justify-center text-white
+                                    ">3</span>
                                 </span>
                                 Notifications
                             </button>
@@ -244,12 +241,12 @@ export default function MobileDrawer({
                         <button
                             onClick={() => { onLogout(); onClose(); }}
                             className="
-                w-full flex items-center justify-center gap-2
-                py-2.5 rounded-xl border border-red-500/30
-                text-red-400 text-sm font-semibold
-                hover:bg-red-500/10 hover:border-red-500/60
-                transition-all duration-200 bg-transparent cursor-pointer
-              "
+                                w-full flex items-center justify-center gap-2
+                                py-2.5 rounded-xl border border-red-500/30
+                                text-red-400 text-sm font-semibold
+                                hover:bg-red-500/10 hover:border-red-500/60
+                                transition-all duration-200 bg-transparent cursor-pointer
+                            "
                         >
                             <LogOut size={16} /> Sign Out
                         </button>
@@ -257,11 +254,10 @@ export default function MobileDrawer({
                         <button
                             onClick={() => navigate("/login")}
                             className="
-                w-full py-3 rounded-xl bg-[#1A3BDB] hover:bg-[#1230B3]
-                text-white text-sm font-bold
-                transition-all duration-200 cursor-pointer
-                font-sora
-              "
+                                w-full py-3 rounded-xl bg-[#1A3BDB] hover:bg-[#1230B3]
+                                text-white text-sm font-bold
+                                transition-all duration-200 cursor-pointer font-sora
+                            "
                         >
                             Sign In
                         </button>

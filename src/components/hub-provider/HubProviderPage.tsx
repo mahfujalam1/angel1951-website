@@ -31,6 +31,7 @@ export default function HubProviderPage() {
             operatingFrom: "",
             operatingTo: "",
             staffMin: "",
+            cctvAvailable: "No",
             staffMax: "",
             footTraffic: "",
             handledDelivery: "No",

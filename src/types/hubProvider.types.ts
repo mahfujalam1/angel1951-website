@@ -18,6 +18,7 @@ export interface HubProviderFormData {
     staffMin: string;
     staffMax: string;
     footTraffic: string;
+    cctvAvailable: "Yes" | "No";
     // Experience
     handledDelivery: "Yes" | "No";
     willingToCommit: "Yes" | "No";

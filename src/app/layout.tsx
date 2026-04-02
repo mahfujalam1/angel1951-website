@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sora, Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/layout/Providers";
+import { Toaster } from 'react-hot-toast';
 
 const sora = Sora({
   subsets: ["latin"],
@@ -25,6 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={` ${inter.variable}`}>
         <Providers>{children}</Providers>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
       </body>
     </html>
   );

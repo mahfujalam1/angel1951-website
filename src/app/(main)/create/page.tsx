@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import AbroadToNigeriaForm from "@/components/create/AbroadToNigeriaForm";
+import AbroadToNigeriaForm from "@/components/create/AbroadToInternationalForm";
 import NigeriaToAbroadForm from "@/components/create/NigeriaToAbroadForm";
+import AbroadToInternational from "@/components/create/AbroadToInternationalForm";
 
-type Tab = "abroad_to_nigeria" | "nigeria_to_abroad";
+type Tab = "abroad_to_international" | "nigeria_to_abroad";
 
 export default function ShippingInformationPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<Tab>("nigeria_to_abroad");
+    const [role, setRole] = useState<string>("");
+    useEffect(() => {
+        const role = localStorage.getItem("role");
+        setRole(role as string);
+
+    }, [])
 
     return (
         <div className="min-h-screen bg-white">
@@ -27,31 +34,32 @@ export default function ShippingInformationPage() {
 
             {/* Tab switcher */}
             <div className="flex justify-center gap-2 py-4 px-4">
-                <button
-                    onClick={() => setActiveTab("nigeria_to_abroad")}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === "nigeria_to_abroad"
-                        ? "bg-gray-900 text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                >
-                    Nigeria to abroad
-                </button>
-                <button
-                    onClick={() => setActiveTab("abroad_to_nigeria")}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition ${activeTab === "abroad_to_nigeria"
-                        ? "bg-gray-900 text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        }`}
-                >
-                    Shipment from abroad to Nigeria
-                </button>
+                {
+                    role === "hubProvider" || role === "partner" ? <button
+                        className={`px-5 py-2 rounded-full text-sm font-medium transition ${role === "hubProvider" || role === "partner"
+                            ? "bg-gray-900 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            }`}
+                    >
+                        Nigeria to abroad
+                    </button> :
+                        <button
+                            className={`px-5 py-2 rounded-full text-sm font-medium transition ${role === ""
+                                ? "bg-gray-900 text-white"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                }`}
+                        >
+                            Shipment from abroad to International
+                        </button>
+                }
+
 
             </div>
 
             {/* Form area */}
             <div className="max-w-3xl mx-auto px-4 pb-16">
-                {activeTab === "abroad_to_nigeria" ? (
-                    <AbroadToNigeriaForm />
+                {role === "" ? (
+                    <AbroadToInternational />
                 ) : (
                     <NigeriaToAbroadForm />
                 )}

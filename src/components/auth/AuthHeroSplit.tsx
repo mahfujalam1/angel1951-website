@@ -6,9 +6,9 @@ interface AuthHeroSplitProps {
 
 export default function AuthHeroSplit({ imgUrl, children, topAction }: AuthHeroSplitProps) {
     return (
-        <div className="min-h-screen grid grid-cols-[40%_60%]">
+        <div className="min-h-screen grid md:grid-cols-[40%_60%]">
             {/* Left — Hero Image */}
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden md:block hidden">
                 <img src={imgUrl} alt="Ship" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 " />
             </div>

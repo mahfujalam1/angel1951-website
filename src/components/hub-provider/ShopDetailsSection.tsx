@@ -112,6 +112,25 @@ export default function ShopDetailsSection() {
                     error={errors.shopEmail?.message}
                     {...register("shopEmail")}
                 />
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        CCTV Camera Available?
+                    </label>
+                    <div className="flex gap-6">
+                        {(["Yes", "No"] as const).map((v) => (
+                            <label key={v} className="flex items-center gap-2 text-sm cursor-pointer">
+                                <input
+                                    type="radio"
+                                    value={v}
+                                    {...register("cctvAvailable")}
+                                    className="accent-blue-600 w-4 h-4"
+                                />
+                                {v}
+                            </label>
+                        ))}
+                    </div>
+                </div>
             </div>
         </SectionCard>
     );
