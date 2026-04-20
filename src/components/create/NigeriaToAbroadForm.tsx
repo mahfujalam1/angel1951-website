@@ -29,7 +29,7 @@ type NigeriaToAbroadFormData = {
     uploadImage: FileList;
 };
 
-const SHIPMENT_TYPES = ["Air Cargo", "Sea Cargo", "Frozen Cargo", "Fresh Cargo", "Express Cargo"];
+const SHIPMENT_TYPES = ["Air Cargo", "Sea Cargo"];
 
 export default function NigeriaToAbroadForm() {
     const {
@@ -77,7 +77,7 @@ export default function NigeriaToAbroadForm() {
         console.log("Address:", finalData.senderAddress);
         console.log("Insurance:", finalData.insurance);
         console.log("Values of Goods:", finalData.valuesOfGoods);
-        console.log("Kilos of Goods:", finalData.kilosOfGoods);
+        // console.log("Kilos of Goods:", finalData.kilosOfGoods);
         console.log("Package (KG):", finalData.packageKg);
         console.log("Selected Hub:", finalData.selectHub);
         console.log("--- Receiver Info ---");
@@ -120,7 +120,7 @@ export default function NigeriaToAbroadForm() {
                     </div>
                 </div>
 
-                
+
             </div>
 
             <hr className="border-gray-100" />
@@ -189,11 +189,11 @@ export default function NigeriaToAbroadForm() {
                     {errors.valuesOfGoods && <p className={errorClass}>{errors.valuesOfGoods.message}</p>}
                 </div>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Kilos of Goods</label>
                     <input type="number" min="0" step="0.01" {...register("kilosOfGoods", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                     {errors.kilosOfGoods && <p className={errorClass}>{errors.kilosOfGoods.message}</p>}
-                </div>
+                </div> */}
 
                 {/* ── Package Information (KG only) ── */}
                 <div className="mb-3">
@@ -297,21 +297,18 @@ export default function NigeriaToAbroadForm() {
             <div>
                 <h2 className={sectionTitle}>Pickup Information:</h2>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className={labelClass}>Address</label>
                     <input {...register("pickupAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
                     {errors.pickupAddress && <p className={errorClass}>{errors.pickupAddress.message}</p>}
-                </div>
+                </div> */}
 
                 <div className="mb-3">
-                    <label className={labelClass}>Select</label>
+                    <label className={labelClass}>Choose your pickup type</label>
                     <select {...register("pickupSelectHub", { required: "Required" })} className={inputClass}>
                         <option value="">Select</option>
-                        <option value="lagos">Lagos</option>
-                        <option value="abuja">Abuja</option>
-                        <option value="port_harcourt">Port Harcourt</option>
-                        <option value="benin">Benin</option>
-                        <option value="ibadan">Ibadan</option>
+                        <option value="doorstepdelivery">Doorstep delivery</option>
+                        <option value="warehousepickup">Warehouse pickup</option>
                     </select>
                     {errors.pickupSelectHub && <p className={errorClass}>{errors.pickupSelectHub.message}</p>}
                 </div>
@@ -327,13 +324,60 @@ export default function NigeriaToAbroadForm() {
                 </div>
             </div>
 
+
+            <div>
+                <h2 className={sectionTitle}>Payment Information:</h2>
+
+                {/* <div className="mb-3">
+                    <label className={labelClass}>Address</label>
+                    <input {...register("pickupAddress", { required: "Required" })} placeholder="Type here..." className={inputClass} />
+                    {errors.pickupAddress && <p className={errorClass}>{errors.pickupAddress.message}</p>}
+                </div> */}
+                <div className="mb-3">
+                    <label className={labelClass}>Service Type</label>
+                    <select {...register("pickupSelectHub", { required: "Required" })} className={inputClass}>
+                        <option value="">Select</option>
+                        <option value="doorstepdelivery">Air Cargo</option>
+                        {/* <option value="warehousepickup">November Alpha Indigo</option> */}
+                        <option value="warehousepickup">Sea Cargo</option>
+                        <option value="warehousepickup">Frozen Cargo</option>
+                        <option value="warehousepickup">Fresh Cargo</option>
+                        <option value="warehousepickup">Express Cargo</option>
+                        <option value="warehousepickup">Packaging</option>
+                    </select>
+                    {errors.pickupSelectHub && <p className={errorClass}>{errors.pickupSelectHub.message}</p>}
+                </div>
+
+
+                <div className="mb-3">
+                    <label className={labelClass}>Currency Type</label>
+                    <select {...register("pickupSelectHub", { required: "Required" })} className={inputClass}>
+                        <option value="">Select</option>
+                        <option value="doorstepdelivery">Naira</option>
+                        {/* <option value="warehousepickup">November Alpha Indigo</option> */}
+                        <option value="warehousepickup">USD dollar</option>
+                        <option value="warehousepickup">CAD</option>
+                        <option value="warehousepickup">AUD</option>
+                        <option value="warehousepickup">EURO</option>
+                        <option value="warehousepickup">GBP</option>
+                    </select>
+                    {errors.pickupSelectHub && <p className={errorClass}>{errors.pickupSelectHub.message}</p>}
+                </div>
+
+                <div className="mb-3">
+                    <label className={labelClass}>Amount Payable:</label>
+                    <input {...register("receiverPostalCode", { required: "Required" })} placeholder="Enter amount" className={inputClass} />
+                    {errors.receiverPostalCode && <p className={errorClass}>{errors.receiverPostalCode.message}</p>}
+                </div>
+
+            </div>
             {/* Submit */}
             <div className="flex justify-center pt-2">
                 <button
                     type="submit"
                     className="w-48 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-full transition"
                 >
-                    Send
+                    Send Invoice
                 </button>
             </div>
         </form>

@@ -121,7 +121,7 @@ export default function AbroadToInternational() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* ── Sender Information ── */}
             <div>
-                <h2 className={sectionTitle}>Sender Information:</h2>
+                <h2 className={sectionTitle}>Sender Informationaaaa:</h2>
 
                 {/* Shipment type + Service type */}
                 <div className="flex flex-wrap gap-x-8 gap-y-3 mb-4">
@@ -362,7 +362,7 @@ export default function AbroadToInternational() {
                     type="submit"
                     className="w-48 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-full transition"
                 >
-                    Send
+                    Get Quote
                 </button>
             </div>
         </form>

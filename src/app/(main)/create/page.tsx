@@ -16,8 +16,8 @@ export default function ShippingInformationPage() {
     useEffect(() => {
         const role = localStorage.getItem("role");
         setRole(role as string);
-
     }, [])
+
 
     return (
         <div className="min-h-screen bg-white">
@@ -35,7 +35,7 @@ export default function ShippingInformationPage() {
             {/* Tab switcher */}
             <div className="flex justify-center gap-2 py-4 px-4">
                 {
-                    role === "hubProvider" || role === "partner" ? <button
+                    role !== "hubProvider" || role !== "partner" ? <button
                         className={`px-5 py-2 rounded-full text-sm font-medium transition ${role === "hubProvider" || role === "partner"
                             ? "bg-gray-900 text-white"
                             : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -49,7 +49,7 @@ export default function ShippingInformationPage() {
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                         >
-                            Shipment from abroad to International
+                            Create International Shipment
                         </button>
                 }
 
@@ -58,7 +58,7 @@ export default function ShippingInformationPage() {
 
             {/* Form area */}
             <div className="max-w-3xl mx-auto px-4 pb-16">
-                {role === "" ? (
+                {!role === null ? (
                     <AbroadToInternational />
                 ) : (
                     <NigeriaToAbroadForm />
