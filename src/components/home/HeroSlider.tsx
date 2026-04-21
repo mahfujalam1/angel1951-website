@@ -103,10 +103,10 @@ export default function HeroSlider() {
             <div
                 className="hero-slider"
                 style={{
-                    position: "relative",   /* ✅ FeatureBar এর জন্য anchor */
+                    position: "relative",
                     width: "100%",
-                    height: "90vh",
-                    overflow: "visible",    /* ✅ MUST — না হলে FeatureBar clip হয়ে যাবে */
+                    height: "100vh",
+                    overflow: "hidden",
                 }}
             >
                 <Slider {...settings}>
@@ -116,10 +116,10 @@ export default function HeroSlider() {
                                 style={{
                                     position: "relative",
                                     width: "100%",
-                                    height: "90vh",
+                                    height: "100vh",
                                     display: "flex",
                                     alignItems: "center",
-                                    background: "#1A3BDB",
+                                    background: "#0A0E1A",
                                 }}
                             >
                                 {/* Background Image */}
@@ -132,7 +132,17 @@ export default function HeroSlider() {
                                         width: "100%",
                                         height: "100%",
                                         objectFit: "cover",
-                                        objectPosition: "right center",
+                                        objectPosition: "center",
+                                    }}
+                                />
+                                
+                                {/* Dark Overlay for readability */}
+                                <div 
+                                    style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        background: "linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
+                                        zIndex: 1
                                     }}
                                 />
 
