@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -57,12 +56,12 @@ export default function LoginForm() {
             {/* Email */}
             <div className="mb-5">
                 <Label className="text-sm font-semibold text-[#1F2937] mb-2 block">Your Email</Label>
-                <Input
+                <input
                     type="email"
                     placeholder="johndoe@shipgrace.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]"
+                    className="w-full h-12 px-4 rounded-xl border border-[#E5E7EB] outline-none focus:border-[#1A3BDB] focus:ring-4 focus:ring-[#1A3BDB]/5 transition-all text-sm"
                 />
             </div>
 

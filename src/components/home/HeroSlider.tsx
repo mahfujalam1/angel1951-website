@@ -78,6 +78,27 @@ export default function HeroSlider() {
                 .hero-slider .slick-slide > div {
                     line-height: 0;
                 }
+                .hero-content {
+                    position: relative;
+                    z-index: 2;
+                    width: 100%;
+                    max-width: 800px;
+                    padding-left: 80px;
+                    padding-right: 40px;
+                }
+                @media (max-width: 768px) {
+                    .hero-content {
+                        padding-left: 16px !important;
+                        padding-right: 16px !important;
+                        max-width: 100% !important;
+                    }
+                    .hero-subtitle {
+                        max-width: 100% !important;
+                    }
+                    .hero-slider .slick-dots {
+                        left: 16px !important;
+                    }
+                }
             `}</style>
             <div
                 className="hero-slider"
@@ -116,15 +137,7 @@ export default function HeroSlider() {
                                 />
 
                                 {/* Content */}
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        zIndex: 2,
-                                        paddingLeft: "80px",
-                                        paddingRight: "40px",
-                                        maxWidth: "700px",
-                                    }}
-                                >
+                                <div className="hero-content">
                                     {/* Badges */}
                                     <div
                                         style={{
@@ -176,6 +189,7 @@ export default function HeroSlider() {
 
                                     {/* Subtitle */}
                                     <p
+                                        className="hero-subtitle"
                                         style={{
                                             fontSize: "16px",
                                             color: "#fff",

@@ -26,8 +26,8 @@ const config: Config = {
                 "light-gray": "#F3F6FF",
             },
             fontFamily: {
-                sans: ["var(--font-inter)", "sans-serif"],
-                poppins: ["var(--font-poppins)", "sans-serif"],
+                sans: ["'Afacad Flux'", "sans-serif"],
+                poppins: ["Poppins", "sans-serif"],
             },
             borderRadius: {
                 lg: "var(--radius)",

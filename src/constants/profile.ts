@@ -14,4 +14,5 @@ export const bonusRules: string[] = [
     "Loyalty rewards auto applied at checkout",
     "10% discount applies to one air cargo shipment",
     "Free shipment applies to one sea cargo shipment",
+    "Extra rewards for every 10kg shipment",
 ];

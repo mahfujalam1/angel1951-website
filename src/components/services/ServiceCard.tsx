@@ -1,23 +1,33 @@
 import { Service } from "@/types/service.types";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ServiceCardProps {
     service: Service;
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
+    const router = useRouter();
     const Icon = service.icon;
 
     return (
-        <div
-            className="
-                flex items-stretch
-                bg-[#F3F4F6]
-                shadow-md
-                transition-all duration-300
-                hover:shadow-lg
-                cursor-pointer
-            "
+        <Link
+            href={`/services/${service.slug || "#"}`}
+            className="flex no-underline group"
         >
+            <div
+                className="
+                    flex items-stretch
+                    w-full
+                    bg-[#F3F4F6]
+                    shadow-md
+                    transition-all duration-300
+                    hover:shadow-2xl
+                    hover:-translate-y-1
+                    cursor-pointer
+                    group
+                "
+            >
             {/* Left Icon Box */}
             <div
                 className="
@@ -64,5 +74,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 </p>
             </div>
         </div>
+        </Link>
     );
 }

@@ -5,6 +5,7 @@ export interface Service {
     tag: string;
     title: string;
     desc: string;
+    slug?: string;
 }
 
 export interface HeroSlide {

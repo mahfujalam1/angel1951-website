@@ -1,8 +1,10 @@
 "use client";
 
-import { Users, Gift, UserPlus } from "lucide-react";
+import { useState } from "react";
+import { Users, Gift, UserPlus, MessageCircle, Phone, Mail } from "lucide-react";
 
 export default function ReferralProgram() {
+    const [showShare, setShowShare] = useState(false);
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
@@ -40,11 +42,29 @@ export default function ReferralProgram() {
                         ))}
                     </div>
 
-                    <div className="text-center">
-                        <button className="bg-primary text-white text-sm font-semibold px-6 py-2.5 rounded-full hover:opacity-90 active:scale-95 transition-all shadow-sm inline-flex items-center gap-2">
+                    <div className="text-center relative">
+                        <button 
+                            onClick={() => setShowShare(!showShare)}
+                            className="bg-primary text-white text-sm font-semibold px-6 py-2.5 rounded-full hover:opacity-90 active:scale-95 transition-all shadow-sm inline-flex items-center gap-2"
+                        >
                             <UserPlus size={14} />
                             Refer a friend and earn bonus
                         </button>
+
+                        {showShare && (
+                            <div className="mt-4 flex items-center justify-center gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                                <a href="#" className="p-2.5 bg-[#0084FF]/10 text-[#0084FF] rounded-full hover:bg-[#0084FF] hover:text-white transition-all transform hover:-translate-y-1">
+                                    <MessageCircle size={20} />
+                                </a>
+                                <a href="#" className="p-2.5 bg-[#25D366]/10 text-[#25D366] rounded-full hover:bg-[#25D366] hover:text-white transition-all transform hover:-translate-y-1">
+                                    <Phone size={20} />
+                                </a>
+                                <a href="#" className="p-2.5 bg-[#EA4335]/10 text-[#EA4335] rounded-full hover:bg-[#EA4335] hover:text-white transition-all transform hover:-translate-y-1">
+                                    <Mail size={20} />
+                                </a>
+                            </div>
+                        )}
+                        
                         <p className="text-xs text-gray-400 mt-1.5">
                             + point earned per successful referral
                         </p>

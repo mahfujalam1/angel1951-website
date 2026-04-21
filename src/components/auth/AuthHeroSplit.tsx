@@ -6,19 +6,32 @@ interface AuthHeroSplitProps {
 
 export default function AuthHeroSplit({ imgUrl, children, topAction }: AuthHeroSplitProps) {
     return (
-        <div className="min-h-screen grid md:grid-cols-[40%_60%]">
-            {/* Left — Hero Image */}
-            <div className="relative overflow-hidden md:block hidden">
-                <img src={imgUrl} alt="Ship" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 " />
+        <div className="min-h-screen flex w-full overflow-hidden relative">
+            {/* Left — Hero Image (Half-Half এর জন্য md:w-1/2) */}
+            <div className="relative hidden md:block md:w-1/2 shrink-0 overflow-hidden">
+                <img
+                    src={imgUrl}
+                    alt="Auth Hero"
+                    className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-primary/10 pointer-events-none" />
             </div>
 
-            {/* Right — Form */}
-            <div className="relative flex flex-col px-16 py-12 overflow-y-auto">
+            {/* Right — Form Container */}
+            <div className="flex-1 relative flex flex-col bg-white overflow-y-auto px-6 md:px-12 lg:px-20 py-12 isolate">
+                {/* Home/Top Action Button (এটির উইডথ ফিক্সড করা হয়েছে যাতে এটি মাঝখানে না আসে) */}
                 {topAction && (
-                    <div className="absolute top-6 right-6">{topAction}</div>
+                    <div className="absolute top-6 right-6 z-50 pointer-events-none">
+                        <div className="pointer-events-auto">
+                            {topAction}
+                        </div>
+                    </div>
                 )}
-                <div className="my-auto pt-14">{children}</div>
+
+                {/* Form Content — এটিকে relative এবং high z-index দেওয়া হয়েছে */}
+                <div className="my-auto pt-10 relative z-20 w-full max-w-lg mx-auto">
+                    {children}
+                </div>
             </div>
         </div>
     );

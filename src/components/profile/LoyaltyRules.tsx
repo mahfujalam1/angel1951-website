@@ -14,12 +14,6 @@ export default function LoyaltyRules() {
                     </li>
                 ))}
             </ul>
-
-            <div className="mt-4 flex justify-center">
-                <button className="border border-gray-200 text-gray-600 text-xs font-semibold px-5 py-2 rounded-full hover:bg-gray-50 transition-colors">
-                    View Bonus Rules
-                </button>
-            </div>
         </div>
     );
 }

@@ -89,7 +89,7 @@ export default function Navbar() {
             <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
               <Package size={32} color="white" />
             </div>
-            <span className="font-inter font-bold text-lg text-white tracking-tight hidden sm:block">
+            <span className="font-inter font-bold text-lg text-white tracking-tight">
               Buan Logistics
             </span>
           </Link>
@@ -139,6 +139,17 @@ export default function Navbar() {
                   Become a Hub Provider
                 </button>
                 <button
+                  onClick={() => {}}
+                  className="
+                    px-3 py-1.5 border border-white/20 rounded-lg
+                    text-white/75 text-[13px] font-medium whitespace-nowrap
+                    hover:border-white/50 hover:text-white hover:bg-white/8
+                    transition-all duration-200 bg-transparent cursor-pointer
+                  "
+                >
+                  Service point Provider
+                </button>
+                <button
                   onClick={() => router.push("/become-partner")}
                   className="
                     px-3 py-1.5 border border-white/20 rounded-lg
@@ -179,8 +190,33 @@ export default function Navbar() {
           </div>
 
           {/* ── Mobile Right ── */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-3">
+            <button
+              onClick={() => {}}
+              className="
+                px-3 py-1.5 border border-white/20 rounded-lg
+                text-white/75 text-[10px] font-medium whitespace-nowrap
+                hover:border-white/50 hover:text-white hover:bg-white/8
+                transition-all duration-200 bg-transparent cursor-pointer
+              "
+            >
+              Service point Provider
+            </button>
             {isAuthenticated && <BellButton router={router} />}
+
+            {noRoleNotAuthenticated && (
+              <button
+                onClick={() => router.push("/login")}
+                className="
+                  px-4 py-1.5 bg-white/10 hover:bg-white/18
+                  border border-white/20 hover:border-white/40
+                  rounded-lg text-white text-[13px] font-semibold
+                  transition-all duration-200 cursor-pointer font-sora
+                "
+              >
+                Sign In
+              </button>
+            )}
 
             {showNav && (
               <button
