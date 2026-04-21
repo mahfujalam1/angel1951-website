@@ -170,7 +170,7 @@ export default function MobileDrawer({
                                 "
                             >
                                 <span className="text-white/50"><Building2 size={17} /></span>
-                                Service point Provider
+                                Service Point Provider
                             </button>
 
                             <button

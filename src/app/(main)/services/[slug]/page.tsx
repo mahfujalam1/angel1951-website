@@ -155,12 +155,11 @@ export default function ServiceDetailsPage() {
                                     </li>
                                 </ul>
 
-                                <Link
-                                    href="/contact"
+                                <h2
                                     className="block mt-10 text-center py-4 bg-white text-primary font-bold rounded-xl hover:bg-gray-50 transition-colors"
                                 >
                                     Talk to an Expert
-                                </Link>
+                                </h2>
                             </div>
 
                             <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100">

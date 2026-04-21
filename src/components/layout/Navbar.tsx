@@ -139,7 +139,7 @@ export default function Navbar() {
                   Become a Hub Provider
                 </button>
                 <button
-                  onClick={() => {}}
+                  onClick={() => { }}
                   className="
                     px-3 py-1.5 border border-white/20 rounded-lg
                     text-white/75 text-[13px] font-medium whitespace-nowrap
@@ -147,7 +147,7 @@ export default function Navbar() {
                     transition-all duration-200 bg-transparent cursor-pointer
                   "
                 >
-                  Service point Provider
+                  Service Point Provider
                 </button>
                 <button
                   onClick={() => router.push("/become-partner")}
@@ -219,8 +219,8 @@ export default function Navbar() {
           navLinks={activeNavLinks}
           pathname={pathname}
           isAuthenticated={isAuthenticated}
-          isProviderRole={isProviderRole}  
-          user={null} 
+          isProviderRole={isProviderRole}
+          user={null}
           onLogout={handleLogout}
         />
       )}
