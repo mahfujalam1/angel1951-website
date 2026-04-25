@@ -23,7 +23,12 @@ const ChatAssistant = () => {
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,6 +67,8 @@ const ChatAssistant = () => {
       setIsTyping(false);
     }, 1500);
   };
+
+  if (!mounted) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
@@ -120,7 +127,7 @@ const ChatAssistant = () => {
                     msg.sender === "user" ? "text-right" : "text-left"
                   )}
                 >
-                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {mounted && msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>
             </div>
@@ -164,7 +171,7 @@ const ChatAssistant = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 group pointer-events-auto",
-          isOpen ? "bg-white text-primary border border-primary/10 rotate-90" : "bg-primary text-white"
+          isOpen ? "bg-white text-primary border border-primary/10 rotate-90" : "bg-primary text-white animate-signal animate-bounce duration-1200"
         )}
       >
         {isOpen ? (

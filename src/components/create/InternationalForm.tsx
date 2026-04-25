@@ -17,6 +17,7 @@ type AbroadToInternationalData = {
     senderPhone: string;
     senderAddress: string;
     whatPickingUp: string;
+    otherWhatPickingUp?: string;
     senderEmail: string;
     shippingType: string;
     packageUnit: string;
@@ -76,6 +77,7 @@ export default function AbroadToInternational() {
     }, []);
 
     const selectedSenderCountry = watch("senderCountry");
+    const whatPickingUp = watch("whatPickingUp");
     const isUK = selectedSenderCountry === "United Kingdom";
     const packageUnit = getUnitForCountry(selectedSenderCountry);
 
@@ -95,6 +97,9 @@ export default function AbroadToInternational() {
         console.log("Phone:", data.senderPhone);
         console.log("Address:", data.senderAddress);
         console.log("What Picking Up:", data.whatPickingUp);
+        if (data.whatPickingUp === "others") {
+            console.log("Other (Specified):", data.otherWhatPickingUp);
+        }
         console.log("Email:", data.senderEmail);
         console.log("Shipping Type:", data.shippingType);
         console.log(`Package (${data.packageUnit}):`, data.packageValue);
@@ -230,6 +235,19 @@ export default function AbroadToInternational() {
                     </select>
                     {errors.whatPickingUp && <p className={errorClass}>{errors.whatPickingUp.message}</p>}
                 </div>
+
+                {/* Conditional Other Input */}
+                {whatPickingUp === "others" && (
+                    <div className="mb-3">
+                        <label className={labelClass}>Please specify</label>
+                        <input
+                            {...register("otherWhatPickingUp", { required: whatPickingUp === "others" ? "Required" : false })}
+                            placeholder="Specify what we are picking up..."
+                            className={inputClass}
+                        />
+                        {errors.otherWhatPickingUp && <p className={errorClass}>{errors.otherWhatPickingUp.message}</p>}
+                    </div>
+                )}
 
                 {/* Email */}
                 <div className="mb-3">

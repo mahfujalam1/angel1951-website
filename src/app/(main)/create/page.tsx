@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import NigeriaToAbroadForm from "@/components/create/NigeriaToAbroadForm";
-import AbroadToInternational from "@/components/create/AbroadToInternationalForm";
+import AbroadToInternational from "@/components/create/InternationalForm";
 
 export default function ShippingInformationPage() {
     const router = useRouter();

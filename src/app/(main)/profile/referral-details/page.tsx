@@ -3,11 +3,16 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChevronLeft, Gift, Calendar, ArrowRight, User, Hash, Info, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 
 function ReferralDetailsContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const date = searchParams.get("date") || "N/A";
     const activity = searchParams.get("activity") || "Referral Activity";
@@ -82,7 +87,9 @@ function ReferralDetailsContent() {
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase mb-0.5 tracking-wider">Reference ID</p>
-                                    <p className="text-sm font-semibold text-gray-800">#REF-{Math.floor(Math.random() * 100000)}</p>
+                                    <p className="text-sm font-semibold text-gray-800">
+                                        {mounted ? `#REF-${Math.floor(Math.random() * 100000)}` : "Loading..."}
+                                    </p>
                                 </div>
                             </div>
                         </div>
