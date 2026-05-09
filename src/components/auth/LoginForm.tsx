@@ -39,7 +39,14 @@ export default function LoginForm() {
         localStorage.setItem('email', form.email)
 
         dispatch(setUser({ id: "1", name: "Demo User", email: form.email }));
-        router.push("/");
+        
+        if (roleValue === "hubProvider") {
+            router.push("/hub-dashboard");
+        } else if (roleValue) {
+            router.push("/dashboard");
+        } else {
+            router.push("/");
+        }
     };
 
     const isLoginDisabled = !selectedRole || !form.email || !form.password;

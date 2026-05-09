@@ -17,7 +17,7 @@ export default function MainLayout({
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />
-            <main className={`${!isHome ? "mt-24" : ""} flex-1`}>
+            <main className={`${!isHome ? "mt-[132px]" : ""} flex-1`}>
                 {children}
             </main>
             <Footer />
