@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, User, LogOut, PackageOpen } from "lucide-react";
+import { PackageOpen, Package } from "lucide-react";
 import MobileDrawer from "./MobileDrawer";
 import TopBar from "./TopBar";
+import ProfileDropdown from "../customUi/ProfileDropdown";
 
 type NavLink = {
   label: string;
@@ -29,9 +30,32 @@ const hubNavLinks: NavLink[] = [
   { label: "Dashboard", href: "/hub-dashboard" },
   { label: "New Intake", href: "/hub-dashboard/intake" },
   { label: "Inventory", href: "/hub-dashboard/inventory" },
+  { label: "Analytics", href: "/hub-dashboard/analytics" },
 ];
 
-const PROVIDER_ROLES = ["hubProvider", "partner"];
+const corporateNavLinks: NavLink[] = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Shipments", href: "/shipments" },
+  { label: "Invoices", href: "/invoices" },
+  { label: "Track Shipment", href: "/status" },
+  { label: "Rewards", href: "/profile/reward" },
+];
+
+const partnerNavLinks: NavLink[] = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Create Shipment", href: "/shipments/create" },
+  { label: "Shipments", href: "/shipments" },
+  { label: "Invoices", href: "/invoices" },
+  { label: "Track Shipment", href: "/status" },
+];
+
+const PROVIDER_ROLES = [
+  "hubProvider",
+  "businessCustomer",
+  "containerCustomer",
+  "corporatePartner",
+  "customer",
+];
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -62,8 +86,16 @@ export default function Navbar() {
   if (isAuthenticated) {
     if (userRole === "hubProvider") {
       activeNavLinks = hubNavLinks;
-    } else if (hasRole) {
-      activeNavLinks = authNavLinks;
+    } else if (
+      userRole === "businessCustomer" ||
+      userRole === "containerCustomer"
+    ) {
+      activeNavLinks = corporateNavLinks;
+    } else if (userRole === "corporatePartner") {
+      activeNavLinks = partnerNavLinks;
+    } else {
+      // For basic customers or if no role is explicitly mapped
+      activeNavLinks = publicNavLinks;
     }
   }
 
@@ -78,20 +110,48 @@ export default function Navbar() {
     localStorage.removeItem("email");
     setUserRole("");
     setIsAuthenticated(false);
-    router.push("/login");
+    router.push("/");
   };
 
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col">
-        <TopBar />
+        <div
+          className={`transition-all duration-300 ease-in-out origin-top ${
+            scrolled
+              ? "max-h-0 opacity-0 overflow-hidden"
+              : "max-h-[72px] opacity-100"
+          }`}
+        >
+          <TopBar />
+        </div>
         <header
           className={`
-            h-[60px] bg-white border-b border-gray-200 shadow-sm transition-all duration-200
-            ${scrolled ? "bg-white/95 backdrop-blur-md" : ""}
+            h-[60px] border-b shadow-sm transition-all duration-200
+            ${scrolled ? "bg-[#18319b] border-[#18319b]" : "bg-white border-gray-200"}
           `}
         >
-          <div className="max-w-[1800px] mx-auto px-6 h-full flex items-center justify-between gap-6">
+          <div className="max-w-[1800px] mx-auto  h-full flex items-center justify-between gap-6 px-2">
+            {/* ── Logo ── */}
+            <Link
+              href="/"
+              className={`flex items-center shrink-0 no-underline gap-2 transition-all duration-300 ${
+                !showNav || scrolled
+                  ? "w-auto opacity-100 mr-2"
+                  : "w-auto opacity-100 mr-2 lg:w-0 lg:opacity-0 lg:overflow-hidden lg:mr-0"
+              }`}
+            >
+              <Package
+                size={28}
+                className={scrolled ? "text-white" : "text-[#18319b]"}
+              />
+              <span
+                className={`font-inter font-bold text-[17px] tracking-tight whitespace-nowrap ${scrolled ? "text-white" : "text-black"}`}
+              >
+                Buan Logistics
+              </span>
+            </Link>
+
             {/* ── Left Nav ── */}
             {showNav ? (
               <nav className="hidden lg:flex items-center gap-1 flex-1 justify-start">
@@ -106,8 +166,12 @@ export default function Navbar() {
                         transition-all duration-200 no-underline
                         ${
                           active
-                            ? "text-primary bg-primary/10"
-                            : "text-gray-700 hover:text-primary hover:bg-gray-50"
+                            ? scrolled
+                              ? "text-white bg-white/20"
+                              : "text-primary bg-primary/10"
+                            : scrolled
+                              ? "text-white/80 hover:text-white hover:bg-white/10"
+                              : "text-gray-700 hover:text-primary hover:bg-gray-50"
                         }
                       `}
                     >
@@ -122,44 +186,13 @@ export default function Navbar() {
 
             {/* ── Right Side — desktop ── */}
             <div className="hidden lg:flex items-center gap-3 shrink-0">
-              {/* CASE 1: No role + Authenticated → Become buttons + Bell + Profile */}
+              {/* CASE 1: No role + Authenticated → Profile only */}
               {noRoleAuthenticated && (
                 <>
-                  <button
-                    onClick={() => router.push("/become-hub")}
-                    className="
-                      px-3 py-2 border border-gray-200 rounded-lg
-                      text-gray-700 text-[13px] font-medium whitespace-nowrap
-                      hover:border-gray-300 hover:text-black hover:bg-gray-50
-                      transition-all duration-200 bg-transparent cursor-pointer
-                    "
-                  >
-                    Become a Hub Provider
-                  </button>
-                  <button
-                    onClick={() => {}}
-                    className="
-                      px-3 py-2 border border-gray-200 rounded-lg
-                      text-gray-700 text-[13px] font-medium whitespace-nowrap
-                      hover:border-gray-300 hover:text-black hover:bg-gray-50
-                      transition-all duration-200 bg-transparent cursor-pointer
-                    "
-                  >
-                    Service Point Provider
-                  </button>
-                  <button
-                    onClick={() => router.push("/become-partner")}
-                    className="
-                      px-3 py-2 border border-gray-200 rounded-lg
-                      text-gray-700 text-[13px] font-medium whitespace-nowrap
-                      hover:border-gray-300 hover:text-black hover:bg-gray-50
-                      transition-all duration-200 bg-transparent cursor-pointer
-                    "
-                  >
-                    Become a Partner
-                  </button>
-                  <BellButton router={router} />
-                  <ProfileDropdown handleLogout={handleLogout} />
+                  <ProfileDropdown
+                    handleLogout={handleLogout}
+                    scrolled={scrolled}
+                  />
                 </>
               )}
 
@@ -169,34 +202,44 @@ export default function Navbar() {
                   {userRole === "hubProvider" && (
                     <button
                       onClick={() => router.push("/hub-dashboard/intake")}
-                      className="
-                        px-4 py-2 bg-[#18319b] hover:bg-[#10247a]
-                        rounded-lg text-white text-[13px] font-medium
-                        transition-all duration-200 cursor-pointer mr-2
-                        flex items-center gap-2
-                      "
+                      className={`
+                        px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 cursor-pointer mr-2 flex items-center gap-2
+                        ${scrolled ? "bg-white text-[#18319b] hover:bg-white/90" : "bg-[#18319b] text-white hover:bg-[#10247a]"}
+                      `}
                     >
                       <PackageOpen size={16} />
                       New Package Intake
                     </button>
                   )}
-                  <BellButton router={router} />
-                  <ProfileDropdown handleLogout={handleLogout} />
+                  <ProfileDropdown
+                    handleLogout={handleLogout}
+                    scrolled={scrolled}
+                  />
                 </>
               )}
 
               {/* CASE 3: No role + Not Authenticated → Sign In only */}
               {noRoleNotAuthenticated && (
-                <button
-                  onClick={() => router.push("/login")}
-                  className="
-                    px-6 py-2 bg-blue-700 hover:bg-blue-900
-                    rounded text-white text-sm font-bold
-                    transition-all duration-200 cursor-pointer
-                  "
-                >
-                  Sign In
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => router.push("/register")}
+                    className={`
+                    px-6 py-2 rounded text-sm font-bold transition-all duration-200 cursor-pointer
+                    ${scrolled ? "bg-white text-blue-700 hover:bg-gray-100" : "bg-blue-700 text-white hover:bg-blue-900"}
+                  `}
+                  >
+                    Sign Up
+                  </button>
+                  <button
+                    onClick={() => router.push("/login")}
+                    className={`
+                    px-6 py-2 rounded text-sm font-bold transition-all duration-200 cursor-pointer
+                    ${scrolled ? "bg-white text-blue-700 hover:bg-gray-100" : "bg-blue-700 text-white hover:bg-blue-900"}
+                  `}
+                  >
+                    Sign In
+                  </button>
+                </div>
               )}
             </div>
 
@@ -205,17 +248,21 @@ export default function Navbar() {
               {showNav && (
                 <button
                   onClick={() => setDrawerOpen(true)}
-                  className="
-                    w-10 h-10 rounded-lg border border-gray-200
-                    flex flex-col items-center justify-center gap-1.5
-                    hover:bg-gray-50 hover:border-gray-300
-                    transition-all duration-200 bg-transparent cursor-pointer
-                  "
+                  className={`
+                    w-10 h-10 rounded-lg border flex flex-col items-center justify-center gap-1.5 transition-all duration-200 bg-transparent cursor-pointer
+                    ${scrolled ? "border-white/20 hover:bg-white/10 hover:border-white" : "border-gray-200 hover:bg-gray-50 hover:border-gray-300"}
+                  `}
                   aria-label="Open menu"
                 >
-                  <span className="h-0.5 bg-gray-600 rounded-full block w-6" />
-                  <span className="h-0.5 bg-gray-600 rounded-full block w-4" />
-                  <span className="h-0.5 bg-gray-600 rounded-full block w-6" />
+                  <span
+                    className={`h-0.5 rounded-full block w-6 ${scrolled ? "bg-white" : "bg-gray-600"}`}
+                  />
+                  <span
+                    className={`h-0.5 rounded-full block w-4 ${scrolled ? "bg-white" : "bg-gray-600"}`}
+                  />
+                  <span
+                    className={`h-0.5 rounded-full block w-6 ${scrolled ? "bg-white" : "bg-gray-600"}`}
+                  />
                 </button>
               )}
             </div>
@@ -237,112 +284,5 @@ export default function Navbar() {
         />
       )}
     </>
-  );
-}
-
-/* ── Bell Button ── */
-interface BellButtonProps {
-  router: ReturnType<typeof useRouter>;
-}
-
-function BellButton({ router }: BellButtonProps) {
-  return (
-    <button
-      onClick={() => router.push("/notifications")}
-      className="
-        relative w-9 h-9 rounded-full border border-gray-200
-        flex items-center justify-center text-gray-600
-        hover:text-black hover:border-gray-300 hover:bg-gray-50
-        transition-all duration-200 bg-transparent cursor-pointer
-      "
-    >
-      <Bell size={16} />
-      <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary rounded-full text-[9px] font-bold flex items-center justify-center text-white">
-        3
-      </span>
-    </button>
-  );
-}
-
-/* ── Profile Dropdown ── */
-interface ProfileDropdownProps {
-  handleLogout: () => void;
-}
-
-function ProfileDropdown({ handleLogout }: ProfileDropdownProps) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const onLogout = () => {
-    setOpen(false);
-    handleLogout();
-  };
-
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen((prev) => !prev)}
-        className="
-          w-9 h-9 rounded-full border border-gray-200
-          flex items-center justify-center text-gray-600
-          hover:text-black hover:border-gray-300 hover:bg-gray-50
-          transition-all duration-200 bg-transparent cursor-pointer
-        "
-      >
-        <User size={16} />
-      </button>
-
-      {open && (
-        <div
-          className="
-            absolute right-0 top-[calc(100%+10px)]
-            w-48 rounded-xl overflow-hidden
-            bg-white
-            border border-gray-100
-            shadow-xl
-            animate-in fade-in slide-in-from-top-2 duration-200
-          "
-        >
-          <div className="absolute -top-1.5 right-3 w-3 h-3 rotate-45 bg-white border-l border-t border-gray-100" />
-
-          <Link
-            href="/profile"
-            onClick={() => setOpen(false)}
-            className="
-              flex items-center gap-2.5 px-4 py-3
-              text-gray-700 hover:text-primary hover:bg-primary/5
-              text-sm font-medium transition-all duration-150
-              no-underline border-b border-gray-100
-            "
-          >
-            <User size={14} className="shrink-0" />
-            Profile
-          </Link>
-
-          <button
-            onClick={onLogout}
-            className="
-              w-full flex items-center gap-2.5 px-4 py-3
-              text-gray-700 hover:text-primary hover:bg-primary/5
-              text-sm font-medium transition-all duration-150
-              bg-transparent cursor-pointer text-left
-            "
-          >
-            <LogOut size={14} className="shrink-0" />
-            Sign Out
-          </button>
-        </div>
-      )}
-    </div>
   );
 }

@@ -9,7 +9,7 @@ export default function RegisterPage() {
         <AuthHeroSplit
             imgUrl={IMAGES.register.src}
             topAction={
-                <Link href="/n">
+                <Link href="/">
                     <Button className="bg-[#0D1117] hover:bg-[#1a2233] text-white rounded-xl px-5">
                         Home
                     </Button>

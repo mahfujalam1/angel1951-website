@@ -60,6 +60,15 @@ export default function AbroadToInternational() {
 
     const [countries, setCountries] = useState<string[]>([]);
     const [loadingCountries, setLoadingCountries] = useState(true);
+    const [userRole, setUserRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setUserRole(localStorage.getItem("role"));
+        }
+    }, []);
+
+    const isCorporate = userRole === "businessCustomer" || userRole === "containerCustomer" || userRole === "corporatePartner";
 
     useEffect(() => {
         fetch("https://countriesnow.space/api/v0.1/countries/positions")
@@ -380,7 +389,7 @@ export default function AbroadToInternational() {
                     type="submit"
                     className="w-48 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-full transition"
                 >
-                    Get Quote
+                    {isCorporate ? "Create Shipment" : "Get Quote"}
                 </button>
             </div>
         </form>

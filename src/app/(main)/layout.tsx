@@ -6,22 +6,22 @@ import Footer from "@/components/layout/Footer";
 import Toast from "@/components/common/Toast";
 
 export default function MainLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    const isHome = pathname === "/";
+  const isHome = pathname === "/";
 
-    return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className={`${!isHome ? "mt-[132px]" : ""} flex-1`}>
-                {children}
-            </main>
-            <Footer />
-            <Toast />
-        </div>
-    );
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className={`${!isHome ? "mt-[120px]" : ""} flex-1`}>
+        {children}
+      </main>
+      <Footer />
+      <Toast />
+    </div>
+  );
 }

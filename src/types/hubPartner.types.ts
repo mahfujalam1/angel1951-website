@@ -25,4 +25,5 @@ export interface OutPartnerFormData {
     countriesShipToService: string;
     // Images
     imagePreviews: string[];
+  paymentAgreement?: boolean;
 }

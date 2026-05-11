@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Link from "next/link";
+
 import { OutPartnerFormData } from "@/types/hubPartner.types";
 import OutPartnerViewDetails from "./OutPartnerViewDetails";
 import PartnerShopDetailsSection from "./PartnerShopDetailsSection";
 import AuthorizedContactSection from "./AuthorizedContactSection";
-import BusinessCargoSection from "./BusinessCargoSection";
 import RequestedServicesSection from "./RequestedServicesSection";
 import PartnerSpaceImageSection from "./PartnerSpaceImageSection";
 
-export default function OutPartnerPage({ role }: { role?: string }) {
+export default function CorporatePartnerPage({ role }: { role?: string }) {
   const [submitted, setSubmitted] = useState(false);
   const [savedData, setSavedData] = useState<OutPartnerFormData | null>(null);
 
@@ -42,73 +42,41 @@ export default function OutPartnerPage({ role }: { role?: string }) {
   });
 
   const onSubmit = (data: OutPartnerFormData) => {
-    console.log("Out Partner FormData:", data);
+    console.log("Corporate Partner FormData:", data);
     if (typeof window !== "undefined") {
-      localStorage.setItem("role", "partner");
+      localStorage.setItem("role", "corporatePartner");
     }
     setSavedData(data);
     setSubmitted(true);
   };
 
-  const handleEdit = () => {
-    setSubmitted(false);
-  };
+  const handleEdit = () => setSubmitted(false);
 
   if (submitted && savedData) {
     return <OutPartnerViewDetails data={savedData} onEdit={handleEdit} />;
   }
 
-  const getRoleTitle = () => {
-    switch (role) {
-      case "corporate":
-        return "Become a Corporate Partner";
-      case "container":
-        return "Become a Container Customer (T-3)";
-      case "business":
-        return "Become a Business Customer (T-2)";
-      default:
-        return "Become a Business Partner";
-    }
-  };
-
-  const getRoleDescription = () => {
-    switch (role) {
-      case "corporate":
-        return "Become a Corporate Partner to integrate our logistics solutions into your supply chain. Please fill out the information below accurately.";
-      case "container":
-        return "Apply for Container Customer status to manage large scale imports and FCL shipments. Please fill out the information below accurately.";
-      case "business":
-        return "Apply for Business Customer status for volume discounts and dedicated support. Please fill out the information below accurately.";
-      default:
-        return "Sign up your shop to become pickup hub partner. Please fill out the information below accurately.";
-    }
-  };
+  const getTitle = () => "Become a Corporate Partner (Local Logistics)";
+  const getDescription = () =>
+    "Your local logistics company drops parcels to Buan, which ships them internationally. Payment is handled off‑platform via your own agreement with Buan. Please provide your business details below.";
 
   return (
     <FormProvider {...methods}>
       <div className="min-h-screen font-inter py-10">
-        <div className="max-w-6xl mx-auto px-4 ">
+        <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 font-inter">
-              {getRoleTitle()}
-            </h1>
-            <p className="text-sm sm:text-base text-gray-500 mt-2 max-w-md mx-auto leading-relaxed">
-              {getRoleDescription()}
-            </p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{getTitle()}</h1>
+            <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">{getDescription()}</p>
           </div>
 
-          <form
-            onSubmit={methods.handleSubmit(onSubmit)}
-            className="flex flex-col gap-5"
-          >
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <PartnerShopDetailsSection />
             <AuthorizedContactSection />
-            <BusinessCargoSection />
             <RequestedServicesSection />
             <PartnerSpaceImageSection />
 
-            {/* Register */}
+            {/* Register button */}
             <div className="flex justify-center mt-2">
               <button
                 type="submit"
@@ -119,11 +87,8 @@ export default function OutPartnerPage({ role }: { role?: string }) {
             </div>
 
             <p className="text-center text-sm text-gray-500">
-              Already have account?{" "}
-              <Link
-                href="/login"
-                className="text-primary font-semibold hover:underline"
-              >
+              Already have an account?{' '}
+              <Link href="/login" className="text-primary font-semibold hover:underline">
                 Login
               </Link>
             </p>

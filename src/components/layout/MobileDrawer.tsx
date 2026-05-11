@@ -30,6 +30,9 @@ const navIcons: Record<string, React.ReactNode> = {
     "Dashboard": <LayoutDashboard size={17} />,
     "Create Shipment": <Plus size={17} />,
     "Track Shipment": <Radio size={17} />,
+    "Shipments": <Package size={17} />,
+    "Invoices": <Building2 size={17} />,
+    "Rewards": <Plus size={17} />,
 };
 
 export default function MobileDrawer({
