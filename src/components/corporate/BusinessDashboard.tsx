@@ -97,7 +97,7 @@ const BusinessDashboard = () => {
               <div className="flex items-center gap-2"></div>
             </div>
           </div>
-        ))} 01615529295
+        ))}
       </div>
 
       {/* Rewards Banner */}
