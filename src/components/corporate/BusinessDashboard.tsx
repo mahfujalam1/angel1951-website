@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Truck,
@@ -12,6 +12,12 @@ import {
 } from "lucide-react";
 
 const BusinessDashboard = () => {
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    setUserRole(localStorage.getItem("role"));
+  }, []);
+
   const stats = [
     {
       title: "ACTIVE SHIPMENTS",
@@ -133,9 +139,14 @@ const BusinessDashboard = () => {
             Recent Shipments
           </h3>
           <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <Package size={18} />
-            </button>
+            {userRole === "corporatePartner" && (
+              <Link
+                href="/shipments/create"
+                className="px-5 py-2 bg-[#18319b] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#12247a] transition-all shadow-lg shadow-blue-50"
+              >
+                + Create Shipment
+              </Link>
+            )}
           </div>
         </div>
         <div className="overflow-x-auto">
