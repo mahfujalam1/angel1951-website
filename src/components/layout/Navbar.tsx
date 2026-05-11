@@ -19,6 +19,14 @@ const publicNavLinks: NavLink[] = [
   { label: "Track Shipment", href: "/status" },
 ];
 
+const customerNavLinks: NavLink[] = [
+  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Shipments", href: "/shipments" },
+  { label: "Get A Quote", href: "/get-a-quote" },
+  { label: "Track Shipment", href: "/status" },
+];
+
 const authNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Dashboard", href: "/dashboard" },
@@ -93,6 +101,8 @@ export default function Navbar() {
       activeNavLinks = corporateNavLinks;
     } else if (userRole === "corporatePartner") {
       activeNavLinks = partnerNavLinks;
+    } else if (userRole === "customer") {
+      activeNavLinks = customerNavLinks;
     } else {
       // For basic customers or if no role is explicitly mapped
       activeNavLinks = publicNavLinks;
