@@ -138,7 +138,7 @@ export default function Navbar() {
         <header
           className={`
             h-[60px] border-b shadow-sm transition-all duration-200
-            ${scrolled ? "bg-[#18319b] border-[#18319b]" : "bg-white border-gray-200"}
+            ${scrolled ? "bg-[#18319b] border-[#18319b]" : "bg-white"}
           `}
         >
           <div className="max-w-[1800px] mx-auto  h-full flex items-center justify-between gap-6 px-2">

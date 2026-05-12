@@ -52,19 +52,6 @@ const UserDashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-6 space-y-10 animate-fadeIn">
-      {/* Search Section */}
-      <div className="relative group">
-        <Search
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors"
-          size={20}
-        />
-        <input
-          type="text"
-          placeholder="Track your parcel by ID..."
-          className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-400 transition-all shadow-sm"
-        />
-      </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, i) => (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAnalytics, markMonthPaid } from "@/lib/api/hubProvider";
+import { getAnalytics, markMonthPaid, getAnalyticsTrend } from "@/lib/api/hubProvider";
 import { AnalyticsRow } from "@/types/hubProvider.types";
 import AnalyticsChart from "@/components/hub-provider/AnalyticsChart";
 import { Calendar, Filter, Download, ArrowUpRight, ArrowDownRight, CircleDollarSign, Loader2, CheckCircle } from "lucide-react";
@@ -12,14 +12,19 @@ export default function HubAnalyticsPage() {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
   const [data, setData] = useState<AnalyticsRow | null>(null);
+  const [trend, setTrend] = useState<AnalyticsRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getAnalytics(month, year);
+      const [res, trendRes] = await Promise.all([
+        getAnalytics(month, year),
+        getAnalyticsTrend()
+      ]);
       setData(res);
+      setTrend(trendRes);
     } catch (err) {
       toast.error("Failed to load analytics data");
     } finally {
@@ -138,7 +143,7 @@ export default function HubAnalyticsPage() {
           </div>
 
           {/* Chart Section */}
-          <AnalyticsChart data={data} />
+          <AnalyticsChart data={data} trend={trend} />
 
           {/* Settlement Details Table */}
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">

@@ -7,14 +7,31 @@ let parcels: Parcel[] = [];
 export const seedParcels = () => {
   if (parcels.length) return;
   const now = new Date();
-  for (let i = 1; i <= 12; i++) {
-    const date = new Date(now.getFullYear(), now.getMonth() - (i % 3), 5 + i);
+  
+  // Seed a variety of parcels for different statuses and months
+  for (let i = 1; i <= 30; i++) {
+    // Distribute parcels over the last 3 months
+    const monthOffset = i % 3; 
+    const day = (i * 7) % 28 + 1;
+    const date = new Date(now.getFullYear(), now.getMonth() - monthOffset, day);
+    
+    // Cycle through statuses
+    let status: Parcel['status'] = 'Awaiting Pickup';
+    if (i % 5 === 0) status = 'Delivered';
+    else if (i % 5 === 1) status = 'Handed Over';
+    else if (i % 5 === 2) status = 'Ready for Pickup';
+    else if (i % 5 === 3) status = 'Cancelled';
+    
+    // Cycle through payment statuses for delivered items
+    let paymentStatus: Parcel['paymentStatus'] = 'Unpaid';
+    if (status === 'Delivered' && i % 2 === 0) paymentStatus = 'Paid';
+
     parcels.push({
       id: `P${i}`,
       reference: `TRK${1000 + i}`,
-      status: 'Awaiting Pickup',
-      paymentStatus: 'Unpaid',
-      amount: 120 + i * 15,
+      status,
+      paymentStatus,
+      amount: 150 + (i * 10),
       date: date.toISOString(),
     });
   }
@@ -34,7 +51,11 @@ export const updateParcelStatus = async (
 ): Promise<Parcel> => {
   const idx = parcels.findIndex((p) => p.id === id);
   if (idx === -1) throw new Error('Parcel not found');
-  parcels[idx] = { ...parcels[idx], status: newStatus };
+  parcels[idx] = { 
+    ...parcels[idx], 
+    status: newStatus,
+    date: newStatus === 'Handed Over' ? new Date().toISOString() : parcels[idx].date 
+  };
   return parcels[idx];
 };
 
@@ -57,6 +78,23 @@ export const getAnalytics = async (
     unpaidCount: unpaid.length,
     revenue,
   };
+};
+
+/** Get analytics trend for the last 6 months */
+export const getAnalyticsTrend = async (): Promise<AnalyticsRow[]> => {
+  seedParcels();
+  const now = new Date();
+  const trend: AnalyticsRow[] = [];
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const m = d.getMonth() + 1;
+    const y = d.getFullYear();
+    const row = await getAnalytics(m, y);
+    trend.push(row);
+  }
+
+  return trend;
 };
 
 /** Admin marks a month as paid – sets paymentStatus of all delivered parcels in that month to Paid */
