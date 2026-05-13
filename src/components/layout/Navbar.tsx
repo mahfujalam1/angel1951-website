@@ -152,18 +152,13 @@ export default function Navbar() {
                   : "w-auto opacity-100 mr-2 lg:w-0 lg:opacity-0 lg:overflow-hidden lg:mr-0"
               }`}
             >
-              <div>
+              <div className="bg-white rounded">
                 <img
                   src="/images/logo/buan-logo.png"
-                  className="h-12 w-12 rounded-full bg-white p-1"
+                  className="h-12 w-12  p-1"
                   alt="buan-logo"
                 />
               </div>
-              <span
-                className={`font-inter font-bold text-[17px] tracking-tight whitespace-nowrap ${scrolled ? "text-white" : "text-black"}`}
-              >
-                BUAN LOGISTICS
-              </span>
             </Link>
 
             {/* ── Left Nav ── */}

@@ -55,16 +55,13 @@ export default function TopBar() {
           href="/"
           className="flex items-center shrink-0 no-underline gap-3"
         >
-          <div>
+          <div className="w-16 bg-white px-2 rounded">
             <img
               src="/images/logo/buan-logo.png"
-              className="h-12 w-12 rounded-full bg-white p-1  md:block hidden"
+              className="h-10 w-12 p-1 md:block hidden"
               alt="buan-logo"
             />
           </div>
-          <span className="font-inter font-bold text-xl text-white tracking-tight md:block hidden">
-            BUAN LOGISTICS
-          </span>
         </Link>
 
         <div className="flex justify-between md:justify-center items-center gap-6 text-sm font-medium text-white">
