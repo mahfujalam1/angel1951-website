@@ -63,8 +63,6 @@ export default function HubInventoryPage() {
         return "bg-yellow-100 text-yellow-700";
       case "Handed Over":
         return "bg-green-100 text-green-700";
-      case "Ready for Pickup":
-        return "bg-blue-100 text-blue-700";
       case "Delivered":
         return "bg-primary-100 text-primary-700";
       case "Return":

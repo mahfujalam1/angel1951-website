@@ -67,9 +67,7 @@ export default function HubDashboardPage() {
   const awaitingIntake = parcels.filter(
     (p) => p.status === "Awaiting Pickup",
   ).length;
-  const readyForPickup = parcels.filter(
-    (p) => p.status === "Ready for Pickup",
-  ).length;
+  
 
   const handedOverToday = parcels.filter((p) => {
     const isHandedOver = p.status === "Handed Over";
@@ -85,15 +83,13 @@ export default function HubDashboardPage() {
   // Table Data - Show parcels that are either awaiting pickup or ready for pickup
   // As per prompt: "awaiting for pickup remove this card" -> once it's Handed Over it should leave this view
   const activeParcels = parcels.filter(
-    (p) => p.status === "Awaiting Pickup" || p.status === "Ready for Pickup",
+    (p) => p.status === "Awaiting Pickup" || p.status === "Handed Over",
   );
 
   const getStatusStyle = (status: Parcel["status"]) => {
     switch (status) {
       case "Awaiting Pickup":
         return "bg-yellow-100 text-yellow-700";
-      case "Ready for Pickup":
-        return "bg-blue-100 text-blue-700";
       case "Handed Over":
         return "bg-green-100 text-green-700";
       case "Return":
@@ -230,7 +226,7 @@ export default function HubDashboardPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() =>
-                              handleStatusUpdate(row.id, "Ready for Pickup")
+                              handleStatusUpdate(row.id, "Handed Over")
                             }
                             disabled={processingId === row.id}
                             className="w-10 h-7 flex items-center justify-center rounded-md bg-red-500 text-white text-[10px] font-bold hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50"

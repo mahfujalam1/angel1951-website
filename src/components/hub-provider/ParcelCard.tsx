@@ -57,17 +57,17 @@ export default function ParcelCard({ parcel, onRefresh }: Props) {
 
       {parcel.status === "Handed Over" && (
         <button
-          onClick={() => changeStatus("Ready for Pickup")}
+          onClick={() => changeStatus("Handed Over")}
           disabled={loading}
           className="w-full px-3 py-1 bg-green-600 text-white rounded hover:opacity-90"
         >
-          Take Parcel (Ready for Pickup)
+          Take Parcel (Handed Over)
         </button>
       )}
 
-      {parcel.status === "Ready for Pickup" && (
+      {parcel.status === "Handed Over" && (
         <span className="inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-          Ready for Pickup
+          Handed Over
         </span>
       )}
     </div>

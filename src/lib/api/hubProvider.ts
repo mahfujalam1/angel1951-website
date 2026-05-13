@@ -9,20 +9,22 @@ export const seedParcels = () => {
   const now = new Date();
 
   // Seed a variety of parcels for different statuses and months
-  for (let i = 1; i <= 30; i++) {
-    // Distribute parcels over the last 3 months
-    const monthOffset = i % 3;
+  for (let i = 1; i <= 60; i++) {
+    // Distribute parcels over the last 6 months
+    const monthOffset = i % 6;
     const day = ((i * 7) % 28) + 1;
     const date = new Date(now.getFullYear(), now.getMonth() - monthOffset, day);
 
-    // Cycle through statuses
+    // Cycle through statuses - ensure some are Delivered for analytics
     let status: Parcel["status"] = "Awaiting Pickup";
-    if (i % 5 === 1) status = "Handed Over";
-    else if (i % 5 === 2) status = "Ready for Pickup";
+    if (i % 4 === 0) status = "Delivered";
+    else if (i % 4 === 1) status = "Handed Over";
+    else if (i % 4 === 2) status = "Return";
 
-    // Cycle through payment statuses for delivered items
+    // Cycle through payment statuses
     let paymentStatus: Parcel["paymentStatus"] = "Unpaid";
-    if (status === "Ready for Pickup" && i % 2 === 0) paymentStatus = "Paid";
+    if (status === "Delivered" && i % 2 === 0) paymentStatus = "Paid";
+    if (status === "Handed Over" && i % 3 === 0) paymentStatus = "Paid";
 
     parcels.push({
       id: `P${i}`,

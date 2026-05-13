@@ -86,7 +86,23 @@ const InvoiceDetailsPage = ({
         status: "Delivered",
         statusColor: "bg-green-50 text-green-600",
         date: "Oct 24, 2023",
+        amount: 475.5,
+      },
+      {
+        orderNo: "#LG-1002",
+        route: "Berlin (BER) → Tokyo (NRT)",
+        status: "Delivered",
+        statusColor: "bg-green-50 text-green-600",
+        date: "Oct 24, 2023",
         amount: 575.5,
+      },
+      {
+        orderNo: "#LG-1003",
+        route: "Berlin (BER) → Tokyo (NRT)",
+        status: "Delivered",
+        statusColor: "bg-green-50 text-green-600",
+        date: "Oct 24, 2023",
+        amount: 675.5,
       },
     ],
   };
@@ -118,7 +134,10 @@ const InvoiceDetailsPage = ({
     invoice.subtotal - invoice.discount - currentRewardDiscount;
 
   const isInstalmentMode =
-    userRole === "businessCustomer" || userRole === "containerCustomer";
+    userRole === "businessCustomer" ||
+    userRole === "containerCustomer" ||
+    userRole === "corporatePartner" ||
+    userRole === "corporateCustomer";
   const perInstalment = isInstalmentMode
     ? Math.ceil(totalPayable / globalInstalments)
     : totalPayable;
@@ -341,108 +360,113 @@ const InvoiceDetailsPage = ({
         )}
 
         {/* Redeem Reward Table Row */}
-        {userRole !== "corporatePartner" && (
-          <div className="p-8 md:p-12 border-t border-gray-100 bg-white space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[#18319b]">
-                <Gift size={20} />
-                <h3 className="text-sm font-black uppercase tracking-widest">
-                  Redeem Reward
-                </h3>
+        {userRole !== "corporatePartner" &&
+          userRole !== "corporateCustomer" && (
+            <div className="p-8 md:p-12 border-t border-gray-100 bg-white space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-[#18319b]">
+                  <Gift size={20} />
+                  <h3 className="text-sm font-black uppercase tracking-widest">
+                    Redeem Reward
+                  </h3>
+                </div>
+                {!isPaid && (
+                  <button
+                    onClick={handleApplyReward}
+                    disabled={tempSelectedReward === selectedReward}
+                    className="px-8 py-2.5 bg-blue-600 text-white text-[11px] font-black uppercase tracking-[0.15em] rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 disabled:opacity-50 disabled:shadow-none"
+                  >
+                    Apply Reward
+                  </button>
+                )}
               </div>
-              {!isPaid && (
-                <button
-                  onClick={handleApplyReward}
-                  disabled={tempSelectedReward === selectedReward}
-                  className="px-8 py-2.5 bg-blue-600 text-white text-[11px] font-black uppercase tracking-[0.15em] rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 disabled:opacity-50 disabled:shadow-none"
-                >
-                  Apply Reward
-                </button>
-              )}
-            </div>
 
-            <div className="overflow-x-auto border border-gray-100 rounded-2xl">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-50/50 border-b border-gray-100">
-                    <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest w-20">
-                      S/N
-                    </th>
-                    <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      Reward Type
-                    </th>
-                    <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      Benefit
-                    </th>
-                    <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      Progress
-                    </th>
-                    <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {rewards.map((reward, index) => (
-                    <tr
-                      key={reward.id}
-                      className={`group transition-colors ${tempSelectedReward === reward.id ? "bg-blue-50/30" : "hover:bg-gray-50/50"}`}
-                    >
-                      <td className="px-8 py-5">
-                        <div className="flex items-center gap-4">
-                          <label className="relative flex items-center cursor-pointer">
-                            <input
-                              type="radio"
-                              name="reward"
-                              disabled={isPaid}
-                              checked={tempSelectedReward === reward.id}
-                              onChange={() => setTempSelectedReward(reward.id)}
-                              className="sr-only peer"
-                            />
-                            <div className="w-5 h-5 border-2 border-gray-200 rounded-full peer-checked:border-blue-600 peer-checked:bg-blue-600 transition-all after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:w-2 after:h-2 after:bg-white after:rounded-full after:opacity-0 peer-checked:after:opacity-100"></div>
-                          </label>
-                          <span className="text-xs font-bold text-gray-400">
-                            0{index + 1}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-8 py-5">
-                        <span className="text-sm font-black text-gray-900 uppercase tracking-tight">
-                          {reward.type}
-                        </span>
-                      </td>
-                      <td className="px-8 py-5">
-                        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg uppercase tracking-widest">
-                          {reward.label}
-                        </span>
-                      </td>
-                      <td className="px-8 py-5">
-                        <div className="flex items-center gap-4 min-w-[150px]">
-                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-blue-600 transition-all duration-1000"
-                              style={{ width: `${reward.progress}%` }}
-                            />
-                          </div>
-                          <span className="text-[10px] font-black text-gray-400 whitespace-nowrap">
-                            {reward.current}/{reward.total}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-8 py-5 text-right">
-                        <span
-                          className={`text-[10px] font-black uppercase tracking-widest ${reward.progress >= 100 ? "text-green-500" : "text-orange-500"}`}
-                        >
-                          {reward.progress >= 100 ? "Unlocked" : "In Progress"}
-                        </span>
-                      </td>
+              <div className="overflow-x-auto border border-gray-100 rounded-2xl">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-gray-50/50 border-b border-gray-100">
+                      <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest w-20">
+                        S/N
+                      </th>
+                      <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Reward Type
+                      </th>
+                      <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Benefit
+                      </th>
+                      <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        Progress
+                      </th>
+                      <th className="px-8 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">
+                        Status
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {rewards.map((reward, index) => (
+                      <tr
+                        key={reward.id}
+                        className={`group transition-colors ${tempSelectedReward === reward.id ? "bg-blue-50/30" : "hover:bg-gray-50/50"}`}
+                      >
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4">
+                            <label className="relative flex items-center cursor-pointer">
+                              <input
+                                type="radio"
+                                name="reward"
+                                disabled={isPaid}
+                                checked={tempSelectedReward === reward.id}
+                                onChange={() =>
+                                  setTempSelectedReward(reward.id)
+                                }
+                                className="sr-only peer"
+                              />
+                              <div className="w-5 h-5 border-2 border-gray-200 rounded-full peer-checked:border-blue-600 peer-checked:bg-blue-600 transition-all after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:w-2 after:h-2 after:bg-white after:rounded-full after:opacity-0 peer-checked:after:opacity-100"></div>
+                            </label>
+                            <span className="text-xs font-bold text-gray-400">
+                              0{index + 1}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span className="text-sm font-black text-gray-900 uppercase tracking-tight">
+                            {reward.type}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg uppercase tracking-widest">
+                            {reward.label}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4 min-w-[150px]">
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-blue-600 transition-all duration-1000"
+                                style={{ width: `${reward.progress}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] font-black text-gray-400 whitespace-nowrap">
+                              {reward.current}/{reward.total}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-5 text-right">
+                          <span
+                            className={`text-[10px] font-black uppercase tracking-widest ${reward.progress >= 100 ? "text-green-500" : "text-orange-500"}`}
+                          >
+                            {reward.progress >= 100
+                              ? "Unlocked"
+                              : "In Progress"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Footer Calculation Section */}
         <div className="p-12 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row justify-between gap-12">
