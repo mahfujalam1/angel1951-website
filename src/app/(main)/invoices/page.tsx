@@ -29,19 +29,28 @@ const InvoicesPage = () => {
       id: "INV-2026-00123",
       invoiceNo: "INV-2026-00123", 
       amount: 125.5,
-      service: "Parcel", 
-      parcelCount: 2,
-      date: "5/1/2026", 
+      service: "Air Cargo", 
+      trackingId: "BN-782134",
+      date: "May 1, 2026", 
       status: "PAID",
     },
     { 
       id: "INV-2026-00124",
       invoiceNo: "INV-2026-00124", 
       amount: 450.0,
-      service: "Container", 
-      parcelCount: 1,
-      date: "5/10/2026", 
+      service: "Sea Freight", 
+      trackingId: "BN-782135",
+      date: "May 10, 2026", 
       status: "PENDING",
+    },
+    { 
+      id: "INV-2026-00125",
+      invoiceNo: "INV-2026-00125", 
+      amount: 210.0,
+      service: "Local Delivery", 
+      trackingId: "BN-782136",
+      date: "May 12, 2026", 
+      status: "PAID",
     },
   ];
 
@@ -59,7 +68,7 @@ const InvoicesPage = () => {
             Invoice Management
           </h1>
           <p className="text-gray-500 text-sm mt-1 font-medium">
-            Manage your consolidated monthly billings and payments.
+            Manage your individual shipment invoices and payment history.
           </p>
         </div>
 
@@ -104,8 +113,8 @@ const InvoicesPage = () => {
             <thead>
               <tr className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] border-b border-gray-100 bg-gray-50/30">
                 <th className="px-8 py-5">Invoice Number</th>
-                <th className="px-8 py-5">Service Type</th>
-                <th className="px-8 py-5">Parcel Count</th>
+                <th className="px-8 py-5">Shipment Type</th>
+                <th className="px-8 py-5">Tracking ID</th>
                 <th className="px-8 py-5">Amount</th>
                 <th className="px-8 py-5">Date</th>
                 <th className="px-8 py-5 text-center">Status</th>
@@ -136,7 +145,7 @@ const InvoicesPage = () => {
                   </td>
                   <td className="px-8 py-6">
                     <span className="text-sm text-gray-600 font-bold">
-                      {inv.parcelCount} Parcels
+                      {inv.trackingId}
                     </span>
                   </td>
                   <td className="px-8 py-6">

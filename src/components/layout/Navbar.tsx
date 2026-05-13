@@ -23,6 +23,7 @@ const customerNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Shipments", href: "/shipments" },
+  { label: "Invoices", href: "/invoices" },
   { label: "Get A Quote", href: "/get-a-quote" },
   { label: "Track Shipment", href: "/status" },
 ];
@@ -151,14 +152,17 @@ export default function Navbar() {
                   : "w-auto opacity-100 mr-2 lg:w-0 lg:opacity-0 lg:overflow-hidden lg:mr-0"
               }`}
             >
-              <Package
-                size={28}
-                className={scrolled ? "text-white" : "text-[#18319b]"}
-              />
+              <div>
+                <img
+                  src="/images/logo/buan-logo.png"
+                  className="h-12 w-12 rounded-full bg-white p-1"
+                  alt="buan-logo"
+                />
+              </div>
               <span
                 className={`font-inter font-bold text-[17px] tracking-tight whitespace-nowrap ${scrolled ? "text-white" : "text-black"}`}
               >
-                Buan Logistics
+                BUAN LOGISTICS
               </span>
             </Link>
 

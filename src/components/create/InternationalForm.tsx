@@ -43,7 +43,7 @@ function getUnitForCountry(country: string): string {
   return COUNTRY_UNIT_MAP[country] ?? "KG"; // default KG
 }
 
-export default function AbroadToInternational() {
+export default function InternationalForm() {
   const {
     register,
     handleSubmit,

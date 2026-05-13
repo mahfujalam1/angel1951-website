@@ -93,13 +93,6 @@ export default function ParcelDetailsPage({ params }: { params: Promise<{ id: st
                   >
                     Hand Over to Branch
                   </button>
-                  <button
-                    disabled={updating}
-                    onClick={() => handleStatusChange("Cancelled")}
-                    className="w-full py-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-all"
-                  >
-                    Cancel Shipment
-                  </button>
                 </div>
               ) : (
                 <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-center">

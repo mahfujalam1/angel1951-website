@@ -1,4 +1,4 @@
-import { Parcel, AnalyticsRow } from '@/types/hubProvider.types';
+import { Parcel, AnalyticsRow } from "@/types/hubProvider.types";
 
 // In‑memory store (will reset on server restart)
 let parcels: Parcel[] = [];
@@ -7,31 +7,29 @@ let parcels: Parcel[] = [];
 export const seedParcels = () => {
   if (parcels.length) return;
   const now = new Date();
-  
+
   // Seed a variety of parcels for different statuses and months
   for (let i = 1; i <= 30; i++) {
     // Distribute parcels over the last 3 months
-    const monthOffset = i % 3; 
-    const day = (i * 7) % 28 + 1;
+    const monthOffset = i % 3;
+    const day = ((i * 7) % 28) + 1;
     const date = new Date(now.getFullYear(), now.getMonth() - monthOffset, day);
-    
+
     // Cycle through statuses
-    let status: Parcel['status'] = 'Awaiting Pickup';
-    if (i % 5 === 0) status = 'Delivered';
-    else if (i % 5 === 1) status = 'Handed Over';
-    else if (i % 5 === 2) status = 'Ready for Pickup';
-    else if (i % 5 === 3) status = 'Cancelled';
-    
+    let status: Parcel["status"] = "Awaiting Pickup";
+    if (i % 5 === 1) status = "Handed Over";
+    else if (i % 5 === 2) status = "Ready for Pickup";
+
     // Cycle through payment statuses for delivered items
-    let paymentStatus: Parcel['paymentStatus'] = 'Unpaid';
-    if (status === 'Delivered' && i % 2 === 0) paymentStatus = 'Paid';
+    let paymentStatus: Parcel["paymentStatus"] = "Unpaid";
+    if (status === "Ready for Pickup" && i % 2 === 0) paymentStatus = "Paid";
 
     parcels.push({
       id: `P${i}`,
       reference: `TRK${1000 + i}`,
       status,
       paymentStatus,
-      amount: 150 + (i * 10),
+      amount: 150 + i * 10,
       date: date.toISOString(),
     });
   }
@@ -47,14 +45,17 @@ export const getParcels = async (): Promise<Parcel[]> => {
 /** Update status of a parcel (and optionally payment status) */
 export const updateParcelStatus = async (
   id: string,
-  newStatus: Parcel['status']
+  newStatus: Parcel["status"],
 ): Promise<Parcel> => {
   const idx = parcels.findIndex((p) => p.id === id);
-  if (idx === -1) throw new Error('Parcel not found');
-  parcels[idx] = { 
-    ...parcels[idx], 
+  if (idx === -1) throw new Error("Parcel not found");
+  parcels[idx] = {
+    ...parcels[idx],
     status: newStatus,
-    date: newStatus === 'Handed Over' ? new Date().toISOString() : parcels[idx].date 
+    date:
+      newStatus === "Handed Over"
+        ? new Date().toISOString()
+        : parcels[idx].date,
   };
   return parcels[idx];
 };
@@ -62,17 +63,21 @@ export const updateParcelStatus = async (
 /** Get analytics for a specific month/year */
 export const getAnalytics = async (
   month: number,
-  year: number
+  year: number,
 ): Promise<AnalyticsRow> => {
   const filtered = parcels.filter((p) => {
     const d = new Date(p.date);
-    return d.getMonth() + 1 === month && d.getFullYear() === year && p.status === 'Delivered';
+    return (
+      d.getMonth() + 1 === month &&
+      d.getFullYear() === year &&
+      p.status === "Delivered"
+    );
   });
-  const paid = filtered.filter((p) => p.paymentStatus === 'Paid');
-  const unpaid = filtered.filter((p) => p.paymentStatus === 'Unpaid');
+  const paid = filtered.filter((p) => p.paymentStatus === "Paid");
+  const unpaid = filtered.filter((p) => p.paymentStatus === "Unpaid");
   const revenue = paid.reduce((sum, p) => sum + p.amount, 0);
   return {
-    month: `${year}-${String(month).padStart(2, '0')}`,
+    month: `${year}-${String(month).padStart(2, "0")}`,
     deliveredCount: filtered.length,
     paidCount: paid.length,
     unpaidCount: unpaid.length,
@@ -98,18 +103,27 @@ export const getAnalyticsTrend = async (): Promise<AnalyticsRow[]> => {
 };
 
 /** Admin marks a month as paid – sets paymentStatus of all delivered parcels in that month to Paid */
-export const markMonthPaid = async (month: number, year: number): Promise<void> => {
+export const markMonthPaid = async (
+  month: number,
+  year: number,
+): Promise<void> => {
   parcels = parcels.map((p) => {
     const d = new Date(p.date);
-    if (d.getMonth() + 1 === month && d.getFullYear() === year && p.status === 'Delivered') {
-      return { ...p, paymentStatus: 'Paid' };
+    if (
+      d.getMonth() + 1 === month &&
+      d.getFullYear() === year &&
+      p.status === "Delivered"
+    ) {
+      return { ...p, paymentStatus: "Paid" };
     }
     return p;
   });
 };
 
 /** Add a new parcel to the store */
-export const addParcelToStore = async (data: Partial<Parcel>): Promise<Parcel> => {
+export const addParcelToStore = async (
+  data: Partial<Parcel>,
+): Promise<Parcel> => {
   const newParcel: Parcel = {
     id: `P${parcels.length + 1}`,
     reference: data.reference || `REF${1000 + parcels.length + 1}`,
@@ -126,5 +140,5 @@ export const addParcelToStore = async (data: Partial<Parcel>): Promise<Parcel> =
 /** Get a single parcel by ID */
 export const getParcelById = async (id: string): Promise<Parcel | null> => {
   seedParcels();
-  return parcels.find(p => p.id === id) || null;
+  return parcels.find((p) => p.id === id) || null;
 };

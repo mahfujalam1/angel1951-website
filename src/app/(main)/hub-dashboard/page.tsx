@@ -119,11 +119,6 @@ export default function HubDashboardPage() {
             <span className="text-3xl font-semibold text-gray-900">
               {awaitingIntake}
             </span>
-            {awaitingIntake > 0 && (
-              <span className="text-sm font-semibold text-red-500">
-                +{awaitingIntake} new
-              </span>
-            )}
           </div>
         </div>
 
@@ -139,7 +134,6 @@ export default function HubDashboardPage() {
             <span className="text-3xl font-semibold text-gray-900">
               {handedOverToday}
             </span>
-            <span className="text-sm text-gray-500">Real-time</span>
           </div>
         </div>
 
@@ -236,7 +230,7 @@ export default function HubDashboardPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() =>
-                              handleStatusUpdate(row.id, "Cancelled")
+                              handleStatusUpdate(row.id, "Ready for Pickup")
                             }
                             disabled={processingId === row.id}
                             className="w-10 h-7 flex items-center justify-center rounded-md bg-red-500 text-white text-[10px] font-bold hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50"

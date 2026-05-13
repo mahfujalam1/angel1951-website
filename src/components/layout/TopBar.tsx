@@ -32,24 +32,14 @@ export default function TopBar() {
 
   const allApplyForOptions = [
     {
-      label: "Become Hub Provider",
-      href: "/apply-for/become-hub",
-      role: "hubProvider",
-    },
-    {
-      label: "Business Customer (T-2)",
+      label: "Business Customer (Tier 2)",
       href: "/apply-for/business",
       role: "businessCustomer",
     },
     {
-      label: "Container Customer (T-3)",
+      label: "Container Customer (Tier 3)",
       href: "/apply-for/container",
       role: "containerCustomer",
-    },
-    {
-      label: "Corporate Partner",
-      href: "/apply-for/corporate",
-      role: "corporatePartner",
     },
   ];
 
@@ -65,11 +55,15 @@ export default function TopBar() {
           href="/"
           className="flex items-center shrink-0 no-underline gap-3"
         >
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 md:block hidden">
-            <Package size={44} color="white" />
+          <div>
+            <img
+              src="/images/logo/buan-logo.png"
+              className="h-12 w-12 rounded-full bg-white p-1  md:block hidden"
+              alt="buan-logo"
+            />
           </div>
           <span className="font-inter font-bold text-xl text-white tracking-tight md:block hidden">
-            Buan Logistics
+            BUAN LOGISTICS
           </span>
         </Link>
 
@@ -82,6 +76,24 @@ export default function TopBar() {
             <span>Find a Service Point</span>
             <ExternalLink size={14} className="text-white/60" />
           </Link>
+
+          {userRole !== "hubProvider" && (
+            <Link
+              href="/apply-for/become-hub"
+              className="hidden md:block px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded text-[11px] font-black uppercase tracking-wider text-white transition-all"
+            >
+              Become a Hub Provider
+            </Link>
+          )}
+
+          {userRole !== "corporatePartner" && (
+            <Link
+              href="/apply-for/corporate"
+              className="hidden md:block px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded text-[11px] font-black uppercase tracking-wider text-white transition-all"
+            >
+              Become a Partner
+            </Link>
+          )}
 
           <div className="relative" ref={dropdownRef}>
             <button

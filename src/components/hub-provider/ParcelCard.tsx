@@ -46,7 +46,7 @@ export default function ParcelCard({ parcel, onRefresh }: Props) {
             Yes (Hand Over)
           </button>
           <button
-            onClick={() => changeStatus("Cancelled")}
+            onClick={() => changeStatus("Handed Over")}
             disabled={loading}
             className="px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
           >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -46,6 +46,13 @@ export default function MobileDrawer({
     onLogout,
 }: MobileDrawerProps) {
     const router = useRouter();
+    const [userRole, setUserRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (open) {
+            setUserRole(localStorage.getItem("role"));
+        }
+    }, [open]);
 
     useEffect(() => {
         document.body.style.overflow = open ? "hidden" : "";
@@ -154,56 +161,58 @@ export default function MobileDrawer({
                         );
                     })}
 
-                    {/* Partnership section — show only if authenticated and not already a provider */}
-                    {isAuthenticated && !isProviderRole && (
-                        <>
-                            <div className="border-t border-white/8 my-4" />
-                            <p className="text-[11px] font-semibold text-white/30 uppercase tracking-widest px-3 mb-2">
-                                Partnership
-                            </p>
+                    {/* Partnership section — visible to everyone */}
+                    <div className="border-t border-white/8 my-4" />
+                    <p className="text-[11px] font-semibold text-white/30 uppercase tracking-widest px-3 mb-2">
+                        Partnership
+                    </p>
 
-                            <button
-                                onClick={() => {}}
-                                className="
-                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                                    text-sm font-medium text-white/65
-                                    hover:text-white hover:bg-white/8
-                                    transition-all duration-200 bg-transparent cursor-pointer
-                                    mb-1 text-left
-                                "
-                            >
-                                <span className="text-white/50"><Building2 size={17} /></span>
-                                Service Point Provider
-                            </button>
+                    {!isProviderRole && (
+                        <button
+                            onClick={() => navigate("/apply-for")}
+                            className="
+                                w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                text-sm font-medium text-white/65
+                                hover:text-white hover:bg-white/8
+                                transition-all duration-200 bg-transparent cursor-pointer
+                                mb-1 text-left
+                            "
+                        >
+                            <span className="text-white/50"><Building2 size={17} /></span>
+                            Learn About Roles
+                        </button>
+                    )}
 
-                            <button
-                                onClick={() => navigate("/become-hub")}
-                                className="
-                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                                    text-sm font-medium text-white/65
-                                    hover:text-white hover:bg-white/8
-                                    transition-all duration-200 bg-transparent cursor-pointer
-                                    mb-1 text-left
-                                "
-                            >
-                                <span className="text-white/50"><Building2 size={17} /></span>
-                                Become a Hub Provider
-                            </button>
+                    {(!userRole || userRole !== "hubProvider") && (
+                        <button
+                            onClick={() => navigate("/apply-for/become-hub")}
+                            className="
+                                w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                text-sm font-medium text-white/65
+                                hover:text-white hover:bg-white/8
+                                transition-all duration-200 bg-transparent cursor-pointer
+                                mb-1 text-left
+                            "
+                        >
+                            <span className="text-white/50"><Building2 size={17} /></span>
+                            Become a Hub Provider
+                        </button>
+                    )}
 
-                            <button
-                                onClick={() => navigate("/become-partner")}
-                                className="
-                                    w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                                    text-sm font-medium text-white/65
-                                    hover:text-white hover:bg-white/8
-                                    transition-all duration-200 bg-transparent cursor-pointer
-                                    mb-1 text-left
-                                "
-                            >
-                                <span className="text-white/50"><Handshake size={17} /></span>
-                                Become a Partner
-                            </button>
-                        </>
+                    {(!userRole || userRole !== "corporatePartner") && (
+                        <button
+                            onClick={() => navigate("/apply-for/corporate")}
+                            className="
+                                w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                text-sm font-medium text-white/65
+                                hover:text-white hover:bg-white/8
+                                transition-all duration-200 bg-transparent cursor-pointer
+                                mb-1 text-left
+                            "
+                        >
+                            <span className="text-white/50"><Handshake size={17} /></span>
+                            Become a Partner
+                        </button>
                     )}
 
                     {/* Account Links — if logged in */}
