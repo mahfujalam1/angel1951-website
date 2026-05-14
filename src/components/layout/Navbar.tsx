@@ -17,7 +17,6 @@ const publicNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Get A Quote", href: "/get-a-quote" },
   { label: "Track Shipment", href: "/status" },
-  { label: "Help Center", href: "/help-center" },
 ];
 
 const customerNavLinks: NavLink[] = [
@@ -42,6 +41,7 @@ const hubNavLinks: NavLink[] = [
   { label: "New Intake", href: "/hub-dashboard/intake" },
   { label: "Inventory", href: "/hub-dashboard/inventory" },
   { label: "Analytics", href: "/hub-dashboard/analytics" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const corporateNavLinks: NavLink[] = [
@@ -59,6 +59,7 @@ const partnerNavLinks: NavLink[] = [
   { label: "Invoices", href: "/invoices" },
   { label: "Track Shipment", href: "/status" },
   { label: "Rewards", href: "/profile/reward" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const PROVIDER_ROLES = [
@@ -109,7 +110,7 @@ export default function Navbar() {
       activeNavLinks = customerNavLinks;
     } else {
       // For basic customers or if no role is explicitly mapped
-      activeNavLinks = publicNavLinks;
+      activeNavLinks = customerNavLinks;
     }
   }
 
