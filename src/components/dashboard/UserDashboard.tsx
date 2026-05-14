@@ -109,16 +109,6 @@ const UserDashboard = () => {
         </Link>
       </div>
 
-      {/* Shipment Request Section */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between px-2">
-          <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
-            <Package size={18} className="text-blue-600" /> Need a New Shipment?
-          </h3>
-        </div>
-        <ShipmentRequestForm />
-      </div>
-
       {/* Recent Parcels Table */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center">

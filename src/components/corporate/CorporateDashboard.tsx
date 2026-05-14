@@ -115,22 +115,6 @@ const CorporateDashboard = () => {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">Recent Shipments</h3>
-          <div className="flex items-center gap-4">
-             {userRole === "corporatePartner" && (
-               <Link 
-                href="/shipments/create" 
-                className="px-5 py-2 bg-[#18319b] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#12247a] transition-all"
-               >
-                 + Create Shipment
-               </Link>
-             )}
-             <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-               <Package size={18} />
-             </button>
-             <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-               <MoreVertical size={18} />
-             </button>
-          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">

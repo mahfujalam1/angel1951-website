@@ -138,16 +138,6 @@ const ShipmentsPage = () => {
           <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
             Shipment Records
           </h3>
-          <div className="flex items-center gap-4">
-            {userRole === "corporatePartner" && (
-              <Link
-                href="/shipments/create"
-                className="px-5 py-2 bg-[#18319b] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#12247a] transition-all shadow-lg shadow-blue-50"
-              >
-                + Create Shipment
-              </Link>
-            )}
-          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">

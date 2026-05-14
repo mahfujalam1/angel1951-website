@@ -1,7 +1,7 @@
 export interface Parcel {
   id: string;
   reference: string;
-  status: "Awaiting Pickup" | "Handed Over" | "Delivered" | "Return";
+  status: "Awaiting Pickup" | "Handed Over" | "Delivered";
   paymentStatus: "Paid" | "Unpaid";
   amount: number; // in local currency
   date: string; // ISO date string
@@ -11,8 +11,7 @@ export interface Parcel {
 export type ParcelStatus =
   | "Awaiting Pickup"
   | "Handed Over"
-  | "Delivered"
-  | "Return";
+  | "Delivered";
 
 export interface AnalyticsRow {
   month: string; // e.g. "2026-05"

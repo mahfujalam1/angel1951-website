@@ -67,7 +67,6 @@ export default function HubDashboardPage() {
   const awaitingIntake = parcels.filter(
     (p) => p.status === "Awaiting Pickup",
   ).length;
-  
 
   const handedOverToday = parcels.filter((p) => {
     const isHandedOver = p.status === "Handed Over";
@@ -92,8 +91,6 @@ export default function HubDashboardPage() {
         return "bg-yellow-100 text-yellow-700";
       case "Handed Over":
         return "bg-green-100 text-green-700";
-      case "Return":
-        return "bg-red-100 text-red-700";
       default:
         return "bg-gray-100 text-gray-700";
     }

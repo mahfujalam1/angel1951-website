@@ -17,9 +17,8 @@ export const seedParcels = () => {
 
     // Cycle through statuses - ensure some are Delivered for analytics
     let status: Parcel["status"] = "Awaiting Pickup";
-    if (i % 4 === 0) status = "Delivered";
-    else if (i % 4 === 1) status = "Handed Over";
-    else if (i % 4 === 2) status = "Return";
+    if (i % 3 === 0) status = "Delivered";
+    else if (i % 3 === 1) status = "Handed Over";
 
     // Cycle through payment statuses
     let paymentStatus: Parcel["paymentStatus"] = "Unpaid";
