@@ -11,6 +11,7 @@ const usefulLinks = [
   { label: "Services", href: "/#services" },
   { label: "Contact Us", href: "/contact" },
   { label: "FAQ's", href: "/#faq" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const serviceLinks = [
@@ -20,7 +21,7 @@ const serviceLinks = [
   "Frozen cargo",
   "Procurement services",
   "Customs clearance",
-  "Personalized cargo",
+  "Personalized Cargo",
 ];
 
 const subLinks = [

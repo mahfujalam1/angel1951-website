@@ -21,7 +21,7 @@ const ShipmentsPage = () => {
       receiver: "6391 Elgin St. Celina, Delaware 10299",
       phone: "(208) 555-0112",
       status: "Shipment Created",
-      statusColor: "bg-orange-50 text-orange-600",
+      statusColor: "text-orange-500 border-orange-400 bg-orange-50",
       date: "Oct 24, 2023",
     },
     {
@@ -30,7 +30,7 @@ const ShipmentsPage = () => {
       receiver: "3517 W. Gray St. Utica, Pennsylvania 57867",
       phone: "(671) 555-0110",
       status: "At Hub",
-      statusColor: "bg-green-50 text-green-600",
+      statusColor: "text-emerald-500 border-emerald-400 bg-emerald-50",
       date: "Oct 22, 2023",
     },
     {
@@ -39,7 +39,7 @@ const ShipmentsPage = () => {
       receiver: "4140 Parker Rd. Allentown, New Mexico 31134",
       phone: "(205) 555-0100",
       status: "In Transit",
-      statusColor: "bg-blue-50 text-blue-600",
+      statusColor: "text-blue-500 border-blue-400 bg-blue-50",
       date: "Oct 23, 2023",
     },
     {
@@ -48,7 +48,7 @@ const ShipmentsPage = () => {
       receiver: "3891 Ranchview Dr. Richardson, California 62639",
       phone: "(319) 555-0115",
       status: "Custom Processing",
-      statusColor: "bg-purple-50 text-purple-600",
+      statusColor: "text-purple-500 border-purple-400 bg-purple-50",
       date: "Oct 22, 2023",
     },
     {
@@ -57,7 +57,7 @@ const ShipmentsPage = () => {
       receiver: "2972 Westheimer Rd. Santa Ana, Illinois 85486",
       phone: "(303) 555-0105",
       status: "Out of Delivery",
-      statusColor: "bg-gray-50 text-gray-600",
+      statusColor: "text-slate-500 border-slate-400 bg-slate-50",
       date: "Oct 21, 2023",
     },
     {
@@ -66,7 +66,7 @@ const ShipmentsPage = () => {
       receiver: "8502 Preston Rd. Inglewood, Maine 98380",
       phone: "(480) 555-0103",
       status: "Delivered",
-      statusColor: "bg-yellow-50 text-yellow-600",
+      statusColor: "text-yellow-600 border-yellow-500 bg-yellow-50",
       date: "Oct 20, 2023",
     },
   ];
@@ -204,7 +204,7 @@ const ShipmentsPage = () => {
                   </td>
                   <td className="py-6 px-6 text-center">
                     <span
-                      className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tight ${shipment.statusColor} shadow-sm border border-current opacity-80`}
+                      className={`inline-flex items-center px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${shipment.statusColor}`}
                     >
                       {shipment.status}
                     </span>

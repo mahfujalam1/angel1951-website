@@ -15,12 +15,12 @@ type Role =
   | "corporatePartner"
   | "customer"
   | "businessCustomer"
-  | "containerCustomer";
+  | "personalizedCargo";
 
 const ROLES: { value: Role; label: string }[] = [
   { value: "customer", label: "Basic User (T-1)" },
   { value: "businessCustomer", label: "Business Customer (T-2)" },
-  { value: "containerCustomer", label: "Container Customer (T-3)" },
+  { value: "personalizedCargo", label: "Personalized Cargo (T-3)" },
   { value: "corporatePartner", label: "Corporate Partner" },
   { value: "hubProvider", label: "Hub Provider" },
 ];

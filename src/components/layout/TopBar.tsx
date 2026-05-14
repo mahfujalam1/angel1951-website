@@ -37,9 +37,9 @@ export default function TopBar() {
       role: "businessCustomer",
     },
     {
-      label: "Container Customer (Tier 3)",
-      href: "/apply-for/container",
-      role: "containerCustomer",
+      label: "Personalized Cargo (Tier 3)",
+      href: "/apply-for/personalized-cargo",
+      role: "personalizedCargo",
     },
   ];
 
@@ -70,7 +70,7 @@ export default function TopBar() {
             className="flex items-center gap-1.5 hover:text-white/80 transition-colors cursor-pointer"
           >
             <MapPin size={16} />
-            <span>Find a Service Point</span>
+            <span>Find a Buan Branch</span>
             <ExternalLink size={14} className="text-white/60" />
           </Link>
 

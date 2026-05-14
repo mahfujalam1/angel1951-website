@@ -19,8 +19,8 @@ export default function ServicePointsPage() {
         
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find a Service Point</h1>
-          <p className="text-gray-600">Locate our nearest service points to drop off or collect your shipments.</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find a Buan Branch</h1>
+          <p className="text-gray-600">Locate our nearest Buan branches to drop off or collect your shipments.</p>
         </div>
 
         {/* Map Section */}
@@ -34,7 +34,7 @@ export default function ServicePointsPage() {
             allowFullScreen={false} 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="Service Points Map"
+            title="Buan Branch Map"
           />
           <div className="absolute top-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md font-medium text-sm text-gray-800 flex items-center gap-2">
             <MapPin size={16} className="text-primary" />

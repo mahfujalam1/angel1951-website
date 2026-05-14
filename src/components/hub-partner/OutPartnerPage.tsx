@@ -62,8 +62,8 @@ export default function OutPartnerPage({ role }: { role?: string }) {
     switch (role) {
       case "corporate":
         return "Become a Corporate Partner";
-      case "container":
-        return "Become a Container Customer (T-3)";
+      case "personalizedCargo":
+        return "Become a Personalized Cargo Customer (T-3)";
       case "business":
         return "Become a Business Customer (T-2)";
       default:
@@ -75,8 +75,8 @@ export default function OutPartnerPage({ role }: { role?: string }) {
     switch (role) {
       case "corporate":
         return "Become a Corporate Partner to integrate our logistics solutions into your supply chain. Please fill out the information below accurately.";
-      case "container":
-        return "Apply for Container Customer status to manage large scale imports and FCL shipments. Please fill out the information below accurately.";
+      case "personalizedCargo":
+        return "Apply for Personalized Cargo status to manage large scale imports and FCL shipments. Please fill out the information below accurately.";
       case "business":
         return "Apply for Business Customer status for volume discounts and dedicated support. Please fill out the information below accurately.";
       default:

@@ -38,9 +38,9 @@ export default function LearnAboutRolesPage() {
       applyText: "Apply as Business User",
     },
     {
-      id: "containerCustomer",
+      id: "personalizedCargo",
       tier: 3,
-      title: "Container Customer (Tier 3)",
+      title: "Personalized Cargo (Tier 3)",
       icon: <PackageOpen size={32} className="text-primary" />,
       whoTheyAre: "Large-scale shippers requiring full container capacity.",
       whatTheyDo: [
@@ -50,7 +50,7 @@ export default function LearnAboutRolesPage() {
         "Custom large-scale shipment pricing.",
         "Full dashboard management for container logistics.",
       ],
-      applyLink: "/apply-for/container",
+      applyLink: "/apply-for/personalized-cargo",
       applyText: "Apply as Container User",
     },
   ];
@@ -58,11 +58,11 @@ export default function LearnAboutRolesPage() {
   // Logic: 
   // - If user is 'customer' (Tier 1), show Tier 2 & 3
   // - If user is 'businessCustomer' (Tier 2), show Tier 3
-  // - If user is 'containerCustomer' (Tier 3), show none
+  // - If user is 'personalizedCargo' (Tier 3), show none
   
   const getCurrentTier = (role: string | null) => {
     if (role === "businessCustomer") return 2;
-    if (role === "containerCustomer") return 3;
+    if (role === "personalizedCargo") return 3;
     return 1; // Default/Tier 1
   };
 

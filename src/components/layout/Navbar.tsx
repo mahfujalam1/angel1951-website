@@ -17,6 +17,7 @@ const publicNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Get A Quote", href: "/get-a-quote" },
   { label: "Track Shipment", href: "/status" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const customerNavLinks: NavLink[] = [
@@ -26,6 +27,7 @@ const customerNavLinks: NavLink[] = [
   { label: "Invoices", href: "/invoices" },
   { label: "Get A Quote", href: "/get-a-quote" },
   { label: "Track Shipment", href: "/status" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const authNavLinks: NavLink[] = [
@@ -48,20 +50,21 @@ const corporateNavLinks: NavLink[] = [
   { label: "Invoices", href: "/invoices" },
   { label: "Track Shipment", href: "/status" },
   { label: "Rewards", href: "/profile/reward" },
+  { label: "Help Center", href: "/help-center" },
 ];
 
 const partnerNavLinks: NavLink[] = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Create Shipment", href: "/shipments/create" },
   { label: "Shipments", href: "/shipments" },
   { label: "Invoices", href: "/invoices" },
   { label: "Track Shipment", href: "/status" },
+  { label: "Rewards", href: "/profile/reward" },
 ];
 
 const PROVIDER_ROLES = [
   "hubProvider",
   "businessCustomer",
-  "containerCustomer",
+  "personalizedCargo",
   "corporatePartner",
   "customer",
 ];
@@ -97,7 +100,7 @@ export default function Navbar() {
       activeNavLinks = hubNavLinks;
     } else if (
       userRole === "businessCustomer" ||
-      userRole === "containerCustomer"
+      userRole === "personalizedCargo"
     ) {
       activeNavLinks = corporateNavLinks;
     } else if (userRole === "corporatePartner") {

@@ -60,10 +60,10 @@ export default function ContainerCustomerPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 font-inter">
-              Become a Container Customer (Tier 3)
+              Become a Personalized Cargo Customer (Tier 3)
             </h1>
             <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto leading-relaxed">
-              Apply for Container Customer status to manage large‑scale imports and FCL shipments. Please fill out the information below accurately.
+              Apply for Personalized Cargo status to manage large‑scale imports and FCL shipments. Please fill out the information below accurately.
             </p>
           </div>
 

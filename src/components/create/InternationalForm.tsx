@@ -70,7 +70,7 @@ export default function InternationalForm() {
 
   const isCorporate =
     userRole === "businessCustomer" ||
-    userRole === "containerCustomer" ||
+    userRole === "personalizedCargo" ||
     userRole === "corporatePartner";
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export default function InternationalForm() {
           <div>
             <p className={labelClass}>Choose your Shipment type</p>
             <div className="flex gap-4">
-              {(["air_cargo", "sea_cargo"] as const).map((v) => (
+              {(["air_cargo", "sea_cargo", "express_shipment"] as const).map((v) => (
                 <label
                   key={v}
                   className="flex items-center gap-1.5 text-sm cursor-pointer"
@@ -132,7 +132,7 @@ export default function InternationalForm() {
                     {...register("shipmentType")}
                     className="accent-blue-600"
                   />
-                  {v === "air_cargo" ? "Air cargo" : "Sea cargo"}
+                  {v === "air_cargo" ? "Air cargo" : v === "sea_cargo" ? "Sea cargo" : "Express Shipment"}
                 </label>
               ))}
             </div>

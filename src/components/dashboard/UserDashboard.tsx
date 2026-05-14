@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Search,
 } from "lucide-react";
+import ShipmentRequestForm from "./ShipmentRequestForm";
 
 const UserDashboard = () => {
   const stats = [
@@ -106,6 +107,16 @@ const UserDashboard = () => {
             <Clock size={40} className="text-gray-300" />
           </div>
         </Link>
+      </div>
+
+      {/* Shipment Request Section */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between px-2">
+          <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+            <Package size={18} className="text-blue-600" /> Need a New Shipment?
+          </h3>
+        </div>
+        <ShipmentRequestForm />
       </div>
 
       {/* Recent Parcels Table */}

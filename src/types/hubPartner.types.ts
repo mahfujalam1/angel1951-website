@@ -26,4 +26,7 @@ export interface OutPartnerFormData {
     // Images
     imagePreviews: string[];
   paymentAgreement?: boolean;
+  socialMediaHandles?: string;
+  businessType?: string;
+  onlineOffline?: "Online" | "Offline" | "Both";
 }

@@ -35,7 +35,8 @@ const InvoiceDetailsPage = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [paidInstalments, setPaidInstalments] = useState<number>(0);
-  const globalInstalments = 3; // This would typically come from an API/config
+  const isPersonalizedCargo = userRole === "personalizedCargo";
+  const globalInstalments = isPersonalizedCargo ? 2 : 3;
 
   useEffect(() => {
     setUserRole(localStorage.getItem("role"));
@@ -135,9 +136,7 @@ const InvoiceDetailsPage = ({
 
   const isInstalmentMode =
     userRole === "businessCustomer" ||
-    userRole === "containerCustomer" ||
-    userRole === "corporatePartner" ||
-    userRole === "corporateCustomer";
+    userRole === "personalizedCargo";
   const perInstalment = isInstalmentMode
     ? Math.ceil(totalPayable / globalInstalments)
     : totalPayable;
@@ -148,11 +147,19 @@ const InvoiceDetailsPage = ({
           i === globalInstalments - 1
             ? totalPayable - perInstalment * (globalInstalments - 1)
             : perInstalment;
+        
+        let dueDateLabel = `Instalment ${i + 1}`;
+        if (isPersonalizedCargo) {
+          dueDateLabel = i === 0 ? "When container leaves origin" : "After container arrival";
+        } else {
+          dueDateLabel = `Month ${i + 1}`;
+        }
+
         return {
           id: i + 1,
           amount,
           status: i < paidInstalments ? "PAID" : "PENDING",
-          dueDate: `Month ${i + 1}`,
+          dueDate: dueDateLabel,
         };
       })
     : [];
@@ -303,7 +310,9 @@ const InvoiceDetailsPage = ({
                   Instalment Plan
                 </h3>
                 <p className="text-xs text-gray-500 font-medium">
-                  Your payment is divided into {globalInstalments} equal parts
+                  {isPersonalizedCargo 
+                    ? "2-instalment rule applies. Full payment required before goods delivery."
+                    : `Your payment is divided into ${globalInstalments} equal parts`}
                 </p>
               </div>
             </div>

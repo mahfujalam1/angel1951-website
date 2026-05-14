@@ -1,7 +1,7 @@
 'use client'
 import HubDashboardPage from '@/components/hub-dashboard/HubDashboardPage'
 import BusinessDashboard from '@/components/corporate/BusinessDashboard'
-import ContainerDashboard from '@/components/corporate/ContainerDashboard'
+import PersonalizedCargoDashboard from '@/components/corporate/PersonalizedCargoDashboard'
 import CorporatePartnerDashboard from '@/components/corporate/CorporatePartnerDashboard'
 import UserDashboard from '@/components/dashboard/UserDashboard'
 import { useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ function HubProviderDashboard() {
     <div>
       {role === "hubProvider" && <HubDashboardPage />}
       {role === "businessCustomer" && <BusinessDashboard />}
-      {role === "containerCustomer" && <ContainerDashboard />}
+      {role === "personalizedCargo" && <PersonalizedCargoDashboard />}
       {role === "corporatePartner" && <CorporatePartnerDashboard />}
       {role === "customer" && <UserDashboard />}
     </div>
