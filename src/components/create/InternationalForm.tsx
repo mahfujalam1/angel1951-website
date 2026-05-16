@@ -91,6 +91,7 @@ export default function InternationalForm() {
   const selectedSenderCountry = watch("senderCountry");
   const whatPickingUp = watch("whatPickingUp");
   const isUK = selectedSenderCountry === "United Kingdom";
+  const isNigeria = selectedSenderCountry === "Nigeria";
   const packageUnit = getUnitForCountry(selectedSenderCountry);
 
   useEffect(() => {
@@ -121,20 +122,26 @@ export default function InternationalForm() {
           <div>
             <p className={labelClass}>Choose your Shipment type</p>
             <div className="flex gap-4">
-              {(["air_cargo", "sea_cargo", "express_shipment"] as const).map((v) => (
-                <label
-                  key={v}
-                  className="flex items-center gap-1.5 text-sm cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    value={v}
-                    {...register("shipmentType")}
-                    className="accent-blue-600"
-                  />
-                  {v === "air_cargo" ? "Air cargo" : v === "sea_cargo" ? "Sea cargo" : "Express Shipment"}
-                </label>
-              ))}
+              {(["air_cargo", "sea_cargo", "express_shipment"] as const).map(
+                (v) => (
+                  <label
+                    key={v}
+                    className="flex items-center gap-1.5 text-sm cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      value={v}
+                      {...register("shipmentType")}
+                      className="accent-blue-600"
+                    />
+                    {v === "air_cargo"
+                      ? "Air cargo"
+                      : v === "sea_cargo"
+                        ? "Sea cargo"
+                        : "Express Shipment"}
+                  </label>
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -163,15 +170,17 @@ export default function InternationalForm() {
 
         {/* Pickup Services — UK only */}
         <div className="mb-3">
-          <label className={`${labelClass} ${!isUK ? "text-gray-400" : ""}`}>
+          <label
+            className={`${labelClass} ${!isUK && !isNigeria ? "text-gray-400" : ""}`}
+          >
             Pickup Services
-            {!isUK && (
+            {!isUK && !isNigeria && (
               <span className="ml-2 text-xs font-normal text-gray-400">
-                (Available only for United Kingdom)
+                (Available only for United Kingdom and Nigeria)
               </span>
             )}
           </label>
-          {isUK ? (
+          {isUK || isNigeria ? (
             <div className="flex gap-6 mt-1">
               {(["yes", "no"] as const).map((v) => (
                 <label
@@ -182,7 +191,7 @@ export default function InternationalForm() {
                     type="radio"
                     value={v}
                     {...register("pickUpServices", {
-                      required: isUK ? "Required" : false,
+                      required: isUK || isNigeria ? "Required" : false,
                     })}
                     className="accent-blue-600"
                   />
@@ -193,7 +202,7 @@ export default function InternationalForm() {
           ) : (
             <div className={`${disabledInputClass} flex items-center`}>
               <span className="text-gray-400 text-sm">
-                Select United Kingdom to enable
+                Select United Kingdom or Nigeria to enable
               </span>
             </div>
           )}

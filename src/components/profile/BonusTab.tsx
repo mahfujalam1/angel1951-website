@@ -17,9 +17,27 @@ export default function BonusTab() {
                 </div>
                 {/* ৩টি কার্ড এখন গ্রিড আকারে সাজানো হয়েছে */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <LoyaltyCard label="Air Cargo" current={3} total={5} reward="Get 10% Discount" />
-                    <LoyaltyCard label="Sea Cargo" current={2} total={5} reward="Free Shipment" />
-                    <LoyaltyCard label="KG Shipment" current={7} total={10} reward="Bonus Reward" />
+                    <LoyaltyCard 
+                        label="Air Cargo" 
+                        current={3} 
+                        total={5} 
+                        reward="Get 10% Discount" 
+                        description="Get a 10% discount on your next Air Cargo shipment upon reaching 5 loyalty points."
+                    />
+                    <LoyaltyCard 
+                        label="Sea Cargo" 
+                        current={2} 
+                        total={5} 
+                        reward="Free Shipment" 
+                        description="Enjoy 100 kg free shipment for your next Sea Cargo."
+                    />
+                    <LoyaltyCard 
+                        label="KG Shipment" 
+                        current={7} 
+                        total={10} 
+                        reward="Bonus Reward" 
+                        description="Enjoy 100 kg free shipment for your next Sea Cargo."
+                    />
                 </div>
             </div>
 
