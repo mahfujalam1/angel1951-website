@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
+import { addToast } from "@/store/slices/uiSlice";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
 import type { LoginFormData } from "@/types/auth.types";
+import { useLoginMutation } from "@/redux/api/auth/authApi";
 
 type Role =
   | "hubProvider"
@@ -28,6 +30,7 @@ const ROLES: { value: Role; label: string }[] = [
 export default function LoginForm() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation();
 
   const [selectedRole, setSelectedRole] = useState<Role>("customer");
 
@@ -37,22 +40,46 @@ export default function LoginForm() {
     remember: false,
   });
 
-  const handleSubmit = () => {
-    if (!form.email || !form.password || !selectedRole) return;
+  const handleSubmit = async () => {
+    if (!form.email || !form.password) {
+        dispatch(addToast({ message: "Please enter email and password", type: "error" }));
+        return;
+    }
 
-    localStorage.setItem("role", selectedRole);
-    localStorage.setItem("email", form.email);
+    try {
+        const res = await login({ 
+            email: form.email, 
+            password: form.password,
+            role: selectedRole.toUpperCase() // Mapping role to uppercase as per API example (e.g. USER)
+        }).unwrap();
+        dispatch(addToast({ message: "Login successful!", type: "success" }));
 
-    dispatch(setUser({ id: "1", name: "Demo User", email: form.email }));
+        // Store auth data
+        if (res.token) localStorage.setItem("token", res.token);
+        localStorage.setItem("role", res.role || selectedRole);
+        localStorage.setItem("email", form.email);
 
-    if (selectedRole === "hubProvider") {
-      router.push("/hub-dashboard");
-    } else {
-      router.push("/dashboard");
+        dispatch(setUser({ 
+            id: res.user?.id || "1", 
+            name: res.user?.name || "User", 
+            email: form.email 
+        }));
+
+        const finalRole = res.role || selectedRole;
+        if (finalRole === "hubProvider") {
+            router.push("/hub-dashboard");
+        } else {
+            router.push("/dashboard");
+        }
+    } catch (error: any) {
+        dispatch(addToast({ 
+            message: error?.data?.message || "Login failed. Please check your credentials.", 
+            type: "error" 
+        }));
     }
   };
 
-  const isLoginDisabled = !selectedRole || !form.email || !form.password;
+  const isLoginDisabled = !form.email || !form.password || isLoading;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -148,7 +175,7 @@ export default function LoginForm() {
         disabled={isLoginDisabled}
         className="w-full h-12 bg-[#1A3BDB] hover:bg-[#1230B3] text-white font-bold text-[15px] rounded-xl disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        Login
+        {isLoading ? "Logging in..." : "Login"}
       </Button>
 
       {/* Divider */}

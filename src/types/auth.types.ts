@@ -5,10 +5,12 @@ export interface LoginFormData {
 }
 
 export interface RegisterFormData {
-    username: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     confirmPassword: string;
+    referralCode?: string;
     agreeTerms: boolean;
 }
 

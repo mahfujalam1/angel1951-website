@@ -4,29 +4,53 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
+import { addToast } from "@/store/slices/uiSlice";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
 import type { RegisterFormData } from "@/types/auth.types";
+import { useRegisterMutation } from "@/redux/api/auth/authApi";
 
 export default function RegisterForm() {
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const [register, { isLoading }] = useRegisterMutation();
 
     const [form, setForm] = useState<RegisterFormData>({
-        username: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
+        referralCode: "",
         agreeTerms: false,
     });
 
-    const handleSubmit = () => {
-        if (!form.username || !form.email || !form.password || !form.agreeTerms) return;
-        dispatch(setUser({ id: "1", name: form.username, email: form.email }));
-        router.push("/");
+    const handleSubmit = async () => {
+        if (!form.firstName || !form.lastName || !form.email || !form.password || !form.agreeTerms) {
+            dispatch(addToast({ message: "Please fill all required fields", type: "error" }));
+            return;
+        }
+
+        if (form.password !== form.confirmPassword) {
+            dispatch(addToast({ message: "Passwords do not match", type: "error" }));
+            return;
+        }
+
+        try {
+            const { agreeTerms, ...submitData } = form;
+            const res = await register(submitData).unwrap();
+            dispatch(addToast({ message: "Registration successful!", type: "success" }));
+            dispatch(setUser({ id: res.id || "1", name: `${form.firstName} ${form.lastName}`, email: form.email }));
+            router.push("/login");
+        } catch (error: any) {
+            dispatch(addToast({ 
+                message: error?.data?.message || "Registration failed. Please try again.", 
+                type: "error" 
+            }));
+        }
     };
 
     return (
@@ -34,16 +58,24 @@ export default function RegisterForm() {
             <h2 className="text-[28px] font-extrabold text-[#1F2937] font-sora mb-1">Register</h2>
             <p className="text-sm text-[#6B7280] mb-8">Let's start with some facts about you</p>
 
-            <div className="mb-5">
-                <Label className="text-sm font-semibold mb-2 block">User Name</Label>
-                <Input placeholder="type here" value={form.username}
-                    onChange={(e) => setForm({ ...form, username: e.target.value })}
-                    className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]" />
+            <div className="grid grid-cols-2 gap-4 mb-5">
+                <div>
+                    <Label className="text-sm font-semibold mb-2 block">First Name</Label>
+                    <Input placeholder="John" value={form.firstName}
+                        onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                        className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]" />
+                </div>
+                <div>
+                    <Label className="text-sm font-semibold mb-2 block">Last Name</Label>
+                    <Input placeholder="Doe" value={form.lastName}
+                        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                        className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]" />
+                </div>
             </div>
 
             <div className="mb-5">
                 <Label className="text-sm font-semibold mb-2 block">Email</Label>
-                <Input type="email" placeholder="Type here" value={form.email}
+                <Input type="email" placeholder="johndoe@example.com" value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]" />
             </div>
@@ -58,6 +90,13 @@ export default function RegisterForm() {
                 <Label className="text-sm font-semibold mb-2 block">Confirm Password</Label>
                 <PasswordInput value={form.confirmPassword}
                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} />
+            </div>
+
+            <div className="mb-5">
+                <Label className="text-sm font-semibold mb-2 block">Referral Code (Optional)</Label>
+                <Input placeholder="REF-123456" value={form.referralCode}
+                    onChange={(e) => setForm({ ...form, referralCode: e.target.value })}
+                    className="h-11 border-[#E5E7EB] focus:border-[#1A3BDB]" />
             </div>
 
             <div className="flex items-center gap-2 mb-6">
@@ -82,9 +121,9 @@ export default function RegisterForm() {
                 </Button>
             </div>
 
-            <Button onClick={handleSubmit}
-                className="w-full h-12 bg-[#1A3BDB] hover:bg-[#1230B3] text-white font-bold text-[15px] rounded-xl">
-                Register
+            <Button onClick={handleSubmit} disabled={isLoading}
+                className="w-full h-12 bg-[#1A3BDB] hover:bg-[#1230B3] text-white font-bold text-[15px] rounded-xl disabled:opacity-50">
+                {isLoading ? "Registering..." : "Register"}
             </Button>
 
             <p className="text-center text-sm text-[#6B7280] mt-4">
