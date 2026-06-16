@@ -10,7 +10,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
 import type { LoginFormData } from "@/types/auth.types";
-import { useLoginMutation } from "@/redux/api/auth/authApi";
 
 type Role =
   | "hubProvider"
@@ -30,7 +29,7 @@ const ROLES: { value: Role; label: string }[] = [
 export default function LoginForm() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  const isLoading = false;
 
   const [selectedRole, setSelectedRole] = useState<Role>("customer");
 
@@ -47,33 +46,27 @@ export default function LoginForm() {
     }
 
     try {
-      const res = await login({
-        email: form.email,
-        password: form.password,
-        role: selectedRole.toUpperCase() // Mapping role to uppercase as per API example (e.g. USER)
-      }).unwrap();
-      dispatch(addToast({ message: "Login successful!", type: "success" }));
-
-      // Store auth data
-      if (res.token) localStorage.setItem("token", res.token);
-      localStorage.setItem("role", res.role || selectedRole);
+      // Simulate login and store auth data locally
+      localStorage.setItem("token", "dummy-token-12345");
+      localStorage.setItem("role", selectedRole);
       localStorage.setItem("email", form.email);
 
+      dispatch(addToast({ message: "Login successful!", type: "success" }));
+
       dispatch(setUser({
-        id: res.user?.id || "1",
-        name: res.user?.name || "User",
+        id: "1",
+        name: form.email.split("@")[0] || "User",
         email: form.email
       }));
 
-      const finalRole = res.role || selectedRole;
-      if (finalRole === "hubProvider") {
+      if (selectedRole === "hubProvider") {
         router.push("/hub-dashboard");
       } else {
         router.push("/dashboard");
       }
     } catch (error: any) {
       dispatch(addToast({
-        message: error?.data?.message || "Login failed. Please check your credentials.",
+        message: "Login failed. Please check your credentials.",
         type: "error"
       }));
     }

@@ -11,12 +11,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/common/PasswordInput";
 import type { RegisterFormData } from "@/types/auth.types";
-import { useRegisterMutation } from "@/redux/api/auth/authApi";
 
 export default function RegisterForm() {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const [register, { isLoading }] = useRegisterMutation();
+    const isLoading = false;
 
     const [form, setForm] = useState<RegisterFormData>({
         firstName: "",
@@ -40,14 +39,17 @@ export default function RegisterForm() {
         }
 
         try {
-            const { agreeTerms, ...submitData } = form;
-            const res = await register(submitData).unwrap();
+            // Save registered credentials locally
+            localStorage.setItem("token", "dummy-token-12345");
+            localStorage.setItem("role", "customer");
+            localStorage.setItem("email", form.email);
+
             dispatch(addToast({ message: "Registration successful!", type: "success" }));
-            dispatch(setUser({ id: res.id || "1", name: `${form.firstName} ${form.lastName}`, email: form.email }));
+            dispatch(setUser({ id: "1", name: `${form.firstName} ${form.lastName}`, email: form.email }));
             router.push("/login");
         } catch (error: any) {
             dispatch(addToast({ 
-                message: error?.data?.message || "Registration failed. Please try again.", 
+                message: "Registration failed. Please try again.", 
                 type: "error" 
             }));
         }
