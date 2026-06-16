@@ -132,11 +132,10 @@ export default function Navbar() {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col">
         <div
-          className={`transition-all duration-300 ease-in-out origin-top ${
-            scrolled
+          className={`transition-all duration-300 ease-in-out origin-top ${scrolled
               ? "max-h-0 opacity-0 overflow-hidden"
               : "max-h-[72px] opacity-100"
-          }`}
+            }`}
         >
           <TopBar />
         </div>
@@ -150,11 +149,10 @@ export default function Navbar() {
             {/* ── Logo ── */}
             <Link
               href="/"
-              className={`flex items-center shrink-0 no-underline gap-2 transition-all duration-300 ${
-                !showNav || scrolled
+              className={`flex items-center shrink-0 no-underline gap-2 transition-all duration-300 ${!showNav || scrolled
                   ? "w-auto opacity-100 mr-2"
                   : "w-auto opacity-100 mr-2 lg:w-0 lg:opacity-0 lg:overflow-hidden lg:mr-0"
-              }`}
+                }`}
             >
               <div className="bg-white rounded">
                 <img
@@ -177,14 +175,13 @@ export default function Navbar() {
                       className={`
                         px-4 py-2 rounded-lg text-[15px] font-medium
                         transition-all duration-200 no-underline
-                        ${
-                          active
-                            ? scrolled
-                              ? "text-white bg-white/20"
-                              : "text-primary bg-primary/10"
-                            : scrolled
-                              ? "text-white/80 hover:text-white hover:bg-white/10"
-                              : "text-gray-700 hover:text-primary hover:bg-gray-50"
+                        ${active
+                          ? scrolled
+                            ? "text-white bg-white/20"
+                            : "text-primary bg-primary/10"
+                          : scrolled
+                            ? "text-white/80 hover:text-white hover:bg-white/10"
+                            : "text-gray-700 hover:text-primary hover:bg-gray-50"
                         }
                       `}
                     >

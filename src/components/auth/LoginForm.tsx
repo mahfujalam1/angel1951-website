@@ -42,40 +42,40 @@ export default function LoginForm() {
 
   const handleSubmit = async () => {
     if (!form.email || !form.password) {
-        dispatch(addToast({ message: "Please enter email and password", type: "error" }));
-        return;
+      dispatch(addToast({ message: "Please enter email and password", type: "error" }));
+      return;
     }
 
     try {
-        const res = await login({ 
-            email: form.email, 
-            password: form.password,
-            role: selectedRole.toUpperCase() // Mapping role to uppercase as per API example (e.g. USER)
-        }).unwrap();
-        dispatch(addToast({ message: "Login successful!", type: "success" }));
+      const res = await login({
+        email: form.email,
+        password: form.password,
+        role: selectedRole.toUpperCase() // Mapping role to uppercase as per API example (e.g. USER)
+      }).unwrap();
+      dispatch(addToast({ message: "Login successful!", type: "success" }));
 
-        // Store auth data
-        if (res.token) localStorage.setItem("token", res.token);
-        localStorage.setItem("role", res.role || selectedRole);
-        localStorage.setItem("email", form.email);
+      // Store auth data
+      if (res.token) localStorage.setItem("token", res.token);
+      localStorage.setItem("role", res.role || selectedRole);
+      localStorage.setItem("email", form.email);
 
-        dispatch(setUser({ 
-            id: res.user?.id || "1", 
-            name: res.user?.name || "User", 
-            email: form.email 
-        }));
+      dispatch(setUser({
+        id: res.user?.id || "1",
+        name: res.user?.name || "User",
+        email: form.email
+      }));
 
-        const finalRole = res.role || selectedRole;
-        if (finalRole === "hubProvider") {
-            router.push("/hub-dashboard");
-        } else {
-            router.push("/dashboard");
-        }
+      const finalRole = res.role || selectedRole;
+      if (finalRole === "hubProvider") {
+        router.push("/hub-dashboard");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error: any) {
-        dispatch(addToast({ 
-            message: error?.data?.message || "Login failed. Please check your credentials.", 
-            type: "error" 
-        }));
+      dispatch(addToast({
+        message: error?.data?.message || "Login failed. Please check your credentials.",
+        type: "error"
+      }));
     }
   };
 
